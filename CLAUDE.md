@@ -25,9 +25,10 @@ Posture: **quality first** — use the best model for work that matters; save to
 
 - Do not refactor code unrelated to the task. Do not modify unrelated files. Do not install new dependencies without explicit approval. (Measured: these three guardrails are the highest-value rules in controlled studies — `rules/research-2026-07.md`.)
 - No AI attribution anywhere, ever: no `Co-Authored-By`, no "Generated with Claude" in commits, PRs, or release notes.
-- Always create a working branch before starting work. Never commit directly to `main`. Branches land via PR + squash merge: `gh pr merge --squash --delete-branch`.
+- Always create a working branch before starting work. Never commit directly to `main`. Branches land via PR + squash merge: `gh pr merge --squash --delete-branch`. Never leave any branch but `main` in local or remote after merging.
 - If the working directory has no git repository or no associated remote: stop and ask the user how to proceed before making changes.
 - Never release, tag, push, or publish without an explicit user request in the current session.
+- Releases publish via GitHub Actions on tag push ONLY — never locally (`cargo publish`, `npm publish`, `twine upload`, hand-run `gh release create`). Tag + changelog + README consistent, tests passing, before the release push.
 - GitHub Actions only when explicitly asked, and only triggered on merge to `main` / release tags — never per-push or per-PR. Quality gates run locally before merge.
 - Each project lives in its own subdirectory. Add a project-level CLAUDE.md only when its rules differ from these.
 
