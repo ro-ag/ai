@@ -24,4 +24,8 @@ Skipped on purpose: DSPy (generic prompt optimization — SkillOpt covers the sk
 3. **SkillOpt** — once we have custom skills worth training; improves quality AND compresses at the same time.
 4. **promptfoo** — regression harness when this repo's rules/skills are stable enough to protect.
 
+## Orchestrators + skills catalogs (deep-research 2026-07-11)
+
+Cross-vendor orchestrators (PAL MCP, Claude Code Router, claw-orchestrator) and skills catalogs (VoltAgent, anthropics/skills, trailofbits security skills) — full evaluated table with fit notes lives in `rules/research-2026-07.md`. Skills format is now a cross-vendor standard: skills written here serve the whole fleet.
+
 Refresh this scout when adopting anything or ~quarterly. Sources verified 2026-07-11 via web (MS Research blog, GitHub, PyPI, ccusage.com).

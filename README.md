@@ -11,5 +11,6 @@ Private workspace for agent documentation, helpers, and tools. Holds the rules t
 | `rules/tooling.md` | Scouted ecosystem tools (optimizers, token trackers, linters) |
 | `rules/fleet.md` | Subscription fleet (Codex, Cursor, GLM…) and task routing |
 | `AGENTS.md` | Shared hard rules read by the non-Claude tools |
+| `rules/research-2026-07.md` | Verified research: what measurably works in agent setups |
 
 Projects live in their own subdirectories.
