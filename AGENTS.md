@@ -4,6 +4,7 @@ Shared rules for every AI coding tool on this machine (Codex, Cursor, Copilot, A
 
 ## Hard rules
 
+- Do not refactor code unrelated to the task. Do not modify unrelated files. Do not install new dependencies without explicit approval.
 - No AI attribution, ever: no `Co-Authored-By`, no "Generated with …" in commits, PRs, or release notes.
 - Always create a working branch before starting work. Never commit directly to `main`/`master`. Branches land via PR + squash merge, branch deleted at merge.
 - If the working directory has no git repository or no associated remote: stop and ask the user before making changes.
