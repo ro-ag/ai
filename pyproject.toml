@@ -1,12 +1,14 @@
 [project]
 name = "ai-workspace-tools"
-version = "0.1.0"
+version = "0.2.0"
 description = "Helper tools for the agent rules workspace"
 requires-python = ">=3.12"
-dependencies = []
+dependencies = [
+    "rich>=13",
+]
 
 [project.scripts]
-rulesync = "rulesync:main"
+rulesync = "rulesync.cli:main"
 
 [dependency-groups]
 dev = ["pytest>=8"]
