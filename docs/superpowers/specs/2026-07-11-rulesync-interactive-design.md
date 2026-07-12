@@ -92,9 +92,9 @@ executes one plan atomically.
   (`"Generated with Claude"` example in both). CLAUDE.md keeps the Actions
   cost warning it already has; AGENTS.md keeps its pre-existing-workflow caveat
   — content must not conflict, exact phrasing may differ where scope differs.
-- `core.py` `BLOCK` body = verbatim copy of AGENTS.md "hard minimum" bullet
-  list; both AGENTS.md and CLAUDE.md sync notes mention the third copy in
-  `rulesync` so future edits update all three.
+- `core.py` BLOCK stays the condensed "hard minimum" of the AGENTS.md hard
+  rules; AGENTS.md gains a note telling editors to keep the BLOCK in step and
+  re-run `uv run rulesync` after hard-rule changes.
 - `.claude/skills/second-opinion/SKILL.md`: make the three example commands
   stance-specific (critical / steelman / neutral) matching the procedure text.
 - `rules/fleet.md:87`: unsourced "~54% on AA-Omniscience" → keep the caution,

@@ -17,6 +17,6 @@ Private workspace for agent documentation, helpers, and tools. Holds the rules t
 
 | Command | Purpose |
 |---|---|
-| `uv run rulesync` | Sync the "read this repo first" pointer block into every AI tool's global instructions file (claude, codex, cursor, zcode, agy, trae, opencode, copilot) and force Copilot's `includeCoAuthoredBy` to false. Idempotent; `--dry-run` to preview. Re-run after changing hard rules. |
+| `uv run rulesync` | Sync the "read this repo first" pointer block into every AI tool's global instructions file (claude, codex, cursor, zcode, agy, trae, opencode, copilot) and force Copilot's `includeCoAuthoredBy` to false. Interactive by default: status table → pick tools → preview → confirm. `--dry-run` previews, `--yes` applies without prompts, `--tool NAME` targets specific tools. Idempotent; re-run after changing hard rules. |
 
 Projects live in their own subdirectories.
