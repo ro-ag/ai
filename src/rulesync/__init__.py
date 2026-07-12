@@ -30,9 +30,13 @@ tool defaults. Hard minimum if the repo is unavailable:
 
 - NEVER add AI attribution (`Co-Authored-By`, "Generated with ...") to
   commits, PRs, or release notes.
-- Always create a working branch before starting work; land via PR + squash.
+- Always create a working branch before starting work; land via PR + squash;
+  never leave any branch but `main` in local or remote after merging.
 - Never release, tag, publish, or enable CI workflows without an explicit
   user request. If there is no git repo or remote, stop and ask.
+- Releases publish via GitHub Actions on tag push ONLY — never local
+  `cargo publish` / `npm publish` / `twine upload`. Tests pass and tag,
+  changelog, README are consistent before the release push.
 - Do not refactor unrelated code, modify unrelated files, or install new
   dependencies without approval.
 {END}"""

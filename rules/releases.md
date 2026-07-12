@@ -7,7 +7,7 @@ Agents NEVER release autonomously. Every release starts with an explicit user re
 - All work on branches with conventional prefixes: `feat/`, `fix/`, `chore/`, `docs/` — prefixes feed changelogs later.
 - Land via **PR + squash merge**: `gh pr create` → local gates pass (tests, `/verify`, `/code-review`; Copilot reviews the PR free) → `gh pr merge --squash --delete-branch`.
 - One PR = one squashed conventional commit on `main`. History reads like a changelog; any revert is a single commit.
-- `--delete-branch` kills remote + local copies — no stale branches, ever. Branch outlives a few days → rebase it on `main`.
+- **Never leave branches other than `main` in local OR remote once merged.** `gh pr merge --squash --delete-branch` + `git fetch --prune` every time; check `git branch -a` shows only `main` after landing. Branch outlives a few days → rebase it on `main`.
 
 ## Preconditions (all required)
 
@@ -15,6 +15,7 @@ Agents NEVER release autonomously. Every release starts with an explicit user re
 2. Tests pass — run the project's test command and show real output. No green claim without evidence.
 3. Runtime changes verified end-to-end (`/verify` skill or manually driving the affected flow), not just typecheck.
 4. `CHANGELOG.md` updated (Keep a Changelog format) as part of the release commit.
+5. `README.md` reflects the release (version references, usage, new features). Tag, changelog, and README must all be consistent BEFORE anything is pushed.
 
 ## Versioning
 
@@ -27,7 +28,7 @@ Agents NEVER release autonomously. Every release starts with an explicit user re
 2. Commit: `release: vX.Y.Z` — no attribution trailers, ever.
 3. Annotated tag: `git tag -a vX.Y.Z -m "vX.Y.Z"`.
 4. Confirm with the user, then: `git push && git push --tags`.
-5. GitHub release: `gh release create vX.Y.Z --title "vX.Y.Z" --notes-file <notes>` — notes taken from the changelog section. No AI attribution in notes.
+5. The tag push triggers the release workflow — GitHub Actions creates the GitHub Release (notes from the changelog section) and publishes artifacts/registries. **Releases ALWAYS go through GitHub Actions. NEVER publish from a laptop — no local `cargo publish`, `npm publish`, `twine upload`, `goreleaser`, or hand-run `gh release create`.** The laptop's last release action is pushing the tag. No AI attribution in notes.
 
 ## CI cost policy (GitHub Actions on private repos)
 
