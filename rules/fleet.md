@@ -9,7 +9,7 @@ Verified on this machine 2026-07-11. Goal: each tool does what it's best at; pre
 | Claude Code | Max | `claude` | **Main brain.** Orchestration, design, hard implementation, reviews. Skills/subagents per this repo. |
 | Codex CLI 0.142.5 | ChatGPT (logged in) | `codex` | Second opinion on hard bugs; parallel long autonomous runs; gnarly algorithmic work. |
 | Antigravity 1.1.1 | Google Pro | `agy` | Huge-context repo sweeps, multimodal (design→code, screenshots), browser-verified frontend loops. |
-| Gemini CLI 0.46.0 | Google Pro | `gemini` | Quick terminal one-shots; don't burn agent sessions on trivia. |
+| ~~Gemini CLI~~ **DEAD for individuals** (2026-07: `IneligibleTierError`, Google forces Antigravity migration) | Google Pro | use `agy --print` instead | Quick terminal one-shots; don't burn agent sessions on trivia. |
 | Cursor | Pro | `cursor` | Interactive IDE: tab completion, visual multi-file review, human-steered edits. |
 | zcode (GLM 5.2) | coding plan | ZCode.app / `~/.zcode/cli` | **Grunt volume.** Mass refactors, docstrings, test boilerplate, log analysis. Cheapest tokens. |
 | opencode 1.17.7 | OpenCode Go | `opencode` | Terminal glue; parallel worker fleet; model-agnostic experiments. |
@@ -41,7 +41,7 @@ Two axes decide routing: **Intelligence** = handles complex work unsupervised; *
 | Mass mechanical edits, boilerplate | zcode GLM | opencode workers |
 | Frontend with visual verification | Antigravity | Claude Code + Chrome MCP |
 | Whole-repo analysis, giant context | Antigravity / Gemini (1M ctx) | Claude with subagent fan-out |
-| Quick shell/API question | gemini or copilot CLI | — |
+| Quick shell/API question | `agy --print` or copilot CLI | — |
 | PR review | Claude `/code-review` | + Copilot PR review (two independent reviewers) |
 | Long unattended run | Codex cloud tasks | Claude background agents |
 
@@ -58,9 +58,9 @@ Claude Code can drive the other CLIs headlessly from Bash — cross-vendor subag
 
 | Bridge | Headless command | Gets you |
 |---|---|---|
-| Codex | `codex exec "<task>"` | GPT-5.x independent second opinion |
+| Codex | `codex exec "<task>" < /dev/null` | GPT-5.x independent second opinion. Redirect stdin in scripts (it reads stdin otherwise). Keep CLI current (`brew upgrade codex`) — ChatGPT accounts only serve the newest model tier and old CLIs get 400s. |
 | Cursor agent | `cursor-agent -p "<task>" --model <model> --trust` | Any Cursor Pro model — **including Grok 4.5** — headless. Installed 2026.07.09, logged in, bridge tested ✓. Needs `--trust` per directory (never `--yolo`). |
-| Gemini | `gemini -p "<task>"` | Quick Gemini one-shots on Google Pro quota |
+| Gemini/Antigravity | `agy --print "<task>"` (opt. `--model`) | Gemini one-shots on Google Pro quota. `gemini -p` is dead for individual accounts since 2026-07 — always use `agy`. Default print timeout 5m. |
 | Copilot | `copilot -p "<task>"` | Quick answers with GitHub context |
 | opencode | `opencode run "<task>"` | Any OpenCode Go model as a worker |
 
