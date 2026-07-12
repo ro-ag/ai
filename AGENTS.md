@@ -11,6 +11,10 @@ Shared rules for every AI coding tool on this machine (Codex, Cursor, Copilot, A
 - Never release, tag, push, or publish without an explicit user request in the current session.
 - GitHub Actions cost money on private repos: never add or enable a workflow unless explicitly asked. When one exists, it triggers on merge to `main` or on release tags only — never on every push or PR update. Quality gates run locally (tests, lint, review) before merge instead.
 
+## Language rules
+
+- **Rust:** do not combine sources with tests — never put `#[cfg(test)] mod tests` blocks inside a source file. Go-style siblings: `module.rs` + `module_test.rs`, wired from the parent (`lib.rs`/`mod.rs`) with `#[cfg(test)] mod module_test;`.
+
 ## Workspace
 
 - Purpose: agent documentation, helpers, and small tools. Each project in its own subdirectory.

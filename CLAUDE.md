@@ -30,3 +30,7 @@ Posture: **quality first** — use the best model for work that matters; save to
 - Never release, tag, push, or publish without an explicit user request in the current session.
 - GitHub Actions only when explicitly asked, and only triggered on merge to `main` / release tags — never per-push or per-PR. Quality gates run locally before merge.
 - Each project lives in its own subdirectory. Add a project-level CLAUDE.md only when its rules differ from these.
+
+## Language rules
+
+- **Rust:** do not combine sources with tests — never put `#[cfg(test)] mod tests` blocks inside a source file. Go-style siblings: `module.rs` + `module_test.rs`, wired from the parent (`lib.rs`/`mod.rs`) with `#[cfg(test)] mod module_test;`.
