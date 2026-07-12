@@ -9,6 +9,8 @@ Posture: **quality first** — use the best model for work that matters; save to
 - `rules/subagents.md` — read BEFORE delegating work to any subagent
 - `rules/releases.md` — read BEFORE any release, tag, or publish action
 - `rules/agents.md` — inventory of agents, skills, and MCP servers on this machine
+- `rules/fleet.md` — multi-tool subscriptions (Codex, Cursor, GLM…) and task routing
+- `AGENTS.md` — mirrors the hard rules for the non-Claude tools in the fleet; keep in sync with this file
 
 ## Token discipline
 
