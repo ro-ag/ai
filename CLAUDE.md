@@ -10,6 +10,7 @@ Posture: **quality first** — use the best model for work that matters; save to
 - `rules/releases.md` — read BEFORE any release, tag, or publish action
 - `rules/agents.md` — inventory of agents, skills, and MCP servers on this machine
 - `rules/fleet.md` — multi-tool subscriptions (Codex, Cursor, GLM…) and task routing
+- `rules/second-opinion.md` — cross-vendor review via Codex / Grok / Gemini bridges
 - `rules/tooling.md` — scouted ecosystem tools (optimizers, token trackers, linters)
 - `rules/research-2026-07.md` — verified evidence base behind these rules
 - `AGENTS.md` — mirrors the hard rules for the non-Claude tools in the fleet; keep in sync with this file
