@@ -13,4 +13,10 @@ Private workspace for agent documentation, helpers, and tools. Holds the rules t
 | `AGENTS.md` | Shared hard rules read by the non-Claude tools |
 | `rules/research-2026-07.md` | Verified research: what measurably works in agent setups |
 
+## Tools (Python, managed with uv)
+
+| Command | Purpose |
+|---|---|
+| `uv run rulesync` | Sync the "read this repo first" pointer block into every AI tool's global instructions file (claude, codex, cursor, zcode, agy, trae, opencode, copilot) and force Copilot's `includeCoAuthoredBy` to false. Idempotent; `--dry-run` to preview. Re-run after changing hard rules. |
+
 Projects live in their own subdirectories.
