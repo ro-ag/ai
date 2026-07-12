@@ -1,0 +1,19 @@
+[project]
+name = "ai-workspace-tools"
+version = "0.1.0"
+description = "Helper tools for the agent rules workspace"
+requires-python = ">=3.12"
+dependencies = []
+
+[project.scripts]
+rulesync = "rulesync:main"
+
+[dependency-groups]
+dev = ["pytest>=8"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/rulesync"]

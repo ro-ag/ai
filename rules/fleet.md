@@ -91,5 +91,6 @@ Revisit only if: Cursor quota becomes the bottleneck for Grok usage, or a future
 ## Cross-tool consistency
 
 - `AGENTS.md` at repo root carries the shared hard rules — Codex, Cursor, Copilot, Antigravity, Trae, and opencode all read the AGENTS.md standard. Claude Code reads `CLAUDE.md`. **Both must stay in sync.**
+- Every tool's GLOBAL instructions file carries a pointer block to this repo, managed by `uv run rulesync` (marker-delimited, idempotent). Re-run it whenever the hard rules change. It also forces Copilot's `includeCoAuthoredBy=false` (defaults true — attribution-law violation).
 - Same git law everywhere: branch-first, no AI attribution, no autonomous releases, consult if no repo/remote.
 - This repo is the single source of truth for all fleet rules.
