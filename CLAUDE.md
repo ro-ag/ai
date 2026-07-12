@@ -26,4 +26,5 @@ Posture: **quality first** — use the best model for work that matters; save to
 - Always create a working branch before starting work. Never commit directly to `main`.
 - If the working directory has no git repository or no associated remote: stop and ask the user how to proceed before making changes.
 - Never release, tag, push, or publish without an explicit user request in the current session.
+- GitHub Actions only when explicitly asked, and only triggered on merge to `main` / release tags — never per-push or per-PR. Quality gates run locally before merge.
 - Each project lives in its own subdirectory. Add a project-level CLAUDE.md only when its rules differ from these.

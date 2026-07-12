@@ -8,6 +8,7 @@ Shared rules for every AI coding tool on this machine (Codex, Cursor, Copilot, A
 - Always create a working branch before starting work. Never commit directly to `main`/`master`.
 - If the working directory has no git repository or no associated remote: stop and ask the user before making changes.
 - Never release, tag, push, or publish without an explicit user request in the current session.
+- GitHub Actions cost money on private repos: never add or enable a workflow unless explicitly asked. When one exists, it triggers on merge to `main` or on release tags only — never on every push or PR update. Quality gates run locally (tests, lint, review) before merge instead.
 
 ## Workspace
 
