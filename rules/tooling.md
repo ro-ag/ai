@@ -1,0 +1,27 @@
+# Ecosystem tools — scouted 2026-07-11
+
+Candidate tools for better agent results + less token waste. Nothing gets installed without an explicit user request; status tracks where each stands.
+
+## Shortlist (verified, with sources)
+
+| Tool | Category | What it does | Install | Status |
+|---|---|---|---|---|
+| [SkillOpt](https://github.com/microsoft/SkillOpt) | Skill optimizer | Trains/auto-improves skill docs: optimizer model turns scored rollouts into add/delete/replace edits, accepted only if held-out validation improves. Native Claude Code backend (`claude_code_exec`); MS reports +19.1 pts avg accuracy. Emits compact `best_skill.md` (300–2K tokens). v0.2.0 adds `skillopt-sleep` nightly self-evolution. | `pip install skillopt` | evaluate |
+| [ccusage](https://github.com/ryoppippi/ccusage) | Token tracking | Daily/monthly/session/5h-block token+cost reports from local JSONL; live dashboard. 17.1k stars, very active. | `npx ccusage@latest` | evaluate |
+| [promptfoo — test-agent-skills](https://www.promptfoo.dev/docs/guides/test-agent-skills/) | Skill eval harness | Regression-tests SKILL.md files via headless Claude Code runs; `skill-used` assertion proves a skill actually triggers instead of dead-weighting context. | `npx promptfoo@latest` | evaluate |
+| [claudelint](https://github.com/pdugan20/claudelint) | Config linter | 114 rules: CLAUDE.md size/bloat, circular imports, dangerous skill commands, hooks/MCP/agent config. Auto-fix plugin. Pre-1.0. | `npm i claude-code-lint` | evaluate |
+| [cclint](https://github.com/carlrannaberg/cclint) | Config linter | Validates agent/command frontmatter, settings.json hooks, CLAUDE.md structure. Smaller than claudelint. | `npm i -g @carlrannaberg/cclint` | backup option |
+| [claude-plugins-community](https://github.com/anthropics/claude-plugins-community) | Marketplace | Official Anthropic community marketplace, security-scanned. | `claude plugin marketplace add anthropics/claude-plugins-community` | evaluate |
+| [skills-optimizer](https://github.com/claude-world/skills-optimizer) | Skill compression | LLM-verified semantic compression of `.claude/` skills (claims 6:1, verify-compress-reverify loop). 6 stars — niche, inspect before use. | git clone | watch |
+| [Claude Code Usage Monitor](https://github.com/Maciek-roboblog/Claude-Code-Usage-Monitor) | Token tracking | Real-time monitor with predictions/warnings. Unverified depth — ccusage first. | pip/uv | watch |
+
+Skipped on purpose: DSPy (generic prompt optimization — SkillOpt covers the skill niche with a real Claude Code harness), tonsofskills/ccpi mega-marketplace (unvetted, 2,810 skills — official marketplace is the safer source).
+
+## Adoption order (quality-first, waste-reduction)
+
+1. **ccusage** — measure before optimizing. Find where tokens actually go per session/model.
+2. **claudelint** — catch CLAUDE.md bloat and misconfig that silently burns input tokens every session.
+3. **SkillOpt** — once we have custom skills worth training; improves quality AND compresses at the same time.
+4. **promptfoo** — regression harness when this repo's rules/skills are stable enough to protect.
+
+Refresh this scout when adopting anything or ~quarterly. Sources verified 2026-07-11 via web (MS Research blog, GitHub, PyPI, ccusage.com).

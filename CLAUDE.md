@@ -1,12 +1,16 @@
 # AI Workspace
 
-Root workspace for AI/agent projects. These rules exist to get the best results from agents at the lowest token cost.
+Workspace for agent documentation, helpers, and small tools. These rules exist to get the best results from agents without wasting tokens.
+
+Posture: **quality first** — use the best model for work that matters; save tokens by avoiding waste (repeated work, bloated context), not by downgrading quality. **Never use haiku, anywhere, for anything.** Reasoning effort stays at default unless the task needs deep reasoning.
 
 ## Rule files (read on demand — do not preload)
 
 - `rules/subagents.md` — read BEFORE delegating work to any subagent
 - `rules/releases.md` — read BEFORE any release, tag, or publish action
 - `rules/agents.md` — inventory of agents, skills, and MCP servers on this machine
+- `rules/fleet.md` — multi-tool subscriptions (Codex, Cursor, GLM…) and task routing
+- `AGENTS.md` — mirrors the hard rules for the non-Claude tools in the fleet; keep in sync with this file
 
 ## Token discipline
 
@@ -18,6 +22,9 @@ Root workspace for AI/agent projects. These rules exist to get the best results 
 
 ## Hard rules
 
-- No AI attribution anywhere: no `Co-Authored-By`, no "Generated with Claude" in commits, PRs, or release notes.
+- No AI attribution anywhere, ever: no `Co-Authored-By`, no "Generated with Claude" in commits, PRs, or release notes.
+- Always create a working branch before starting work. Never commit directly to `main`. Branches land via PR + squash merge: `gh pr merge --squash --delete-branch`.
+- If the working directory has no git repository or no associated remote: stop and ask the user how to proceed before making changes.
 - Never release, tag, push, or publish without an explicit user request in the current session.
+- GitHub Actions only when explicitly asked, and only triggered on merge to `main` / release tags — never per-push or per-PR. Quality gates run locally before merge.
 - Each project lives in its own subdirectory. Add a project-level CLAUDE.md only when its rules differ from these.

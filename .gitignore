@@ -19,3 +19,6 @@ build/
 
 # Claude Code local settings
 .claude/settings.local.json
+
+# Review artifacts (second-opinion skill)
+.reviews/

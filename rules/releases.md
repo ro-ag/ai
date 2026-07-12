@@ -2,6 +2,13 @@
 
 Agents NEVER release autonomously. Every release starts with an explicit user request in the current session. "Fix this bug" does not imply "and release it".
 
+## Branch flow (law since 2026-07-11)
+
+- All work on branches with conventional prefixes: `feat/`, `fix/`, `chore/`, `docs/` — prefixes feed changelogs later.
+- Land via **PR + squash merge**: `gh pr create` → local gates pass (tests, `/verify`, `/code-review`; Copilot reviews the PR free) → `gh pr merge --squash --delete-branch`.
+- One PR = one squashed conventional commit on `main`. History reads like a changelog; any revert is a single commit.
+- `--delete-branch` kills remote + local copies — no stale branches, ever. Branch outlives a few days → rebase it on `main`.
+
 ## Preconditions (all required)
 
 1. Clean working tree (`git status`), on the release branch (default: `main`).
@@ -21,6 +28,22 @@ Agents NEVER release autonomously. Every release starts with an explicit user re
 3. Annotated tag: `git tag -a vX.Y.Z -m "vX.Y.Z"`.
 4. Confirm with the user, then: `git push && git push --tags`.
 5. GitHub release: `gh release create vX.Y.Z --title "vX.Y.Z" --notes-file <notes>` — notes taken from the changelog section. No AI attribution in notes.
+
+## CI cost policy (GitHub Actions on private repos)
+
+Actions minutes are paid on private repos (2,000/mo free tier; macOS runners burn a 10× multiplier). Therefore:
+
+- **No workflows unless the user explicitly asks.** Default quality gates are local: tests + `/verify` + `/code-review` + Copilot PR review (Copilot review is subscription-included, not Actions minutes).
+- When a workflow is justified, triggers are merge/tag only: `on: push: branches: [main]` and `on: push: tags: ['v*']`. Never `pull_request` or per-push on feature branches.
+- Workflow hygiene: `ubuntu-latest` runners only (never macOS unless the build requires it), `timeout-minutes` set low, `concurrency` with `cancel-in-progress`, path filters to skip doc-only changes.
+- Heavy/regular CI need later → self-hosted runner on this Mac (free minutes, fine for own private repos) before paying for hosted minutes.
+
+## Package registries (npm, PyPI, crates.io, Homebrew…)
+
+- Publish from CI on tag push — never from a laptop. Reproducible builds, no local credentials. This is the one standing Actions use, and it satisfies the cost policy: tags only happen on explicit release requests, so runs are rare and short.
+- Prefer OIDC "trusted publishing" (PyPI, npm provenance, crates.io tokens scoped per-repo) over long-lived tokens in secrets.
+- The GitHub release and the registry publish come from the same tag — one version, one source of truth.
+- Dry-run first when the ecosystem supports it (`npm publish --dry-run`, `cargo publish --dry-run`, `twine check`).
 
 ## Hotfixes
 
