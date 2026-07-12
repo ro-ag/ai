@@ -16,9 +16,9 @@ Route the question to independent models via CLI bridges, collect reports, synth
    - one **supportive** (prompt: "steelman the strongest case for"),
    - one **neutral** (prompt: "weigh both sides, commit to a verdict").
    ```bash
-   codex exec "STANCE. $(cat .reviews/<dir>/brief.md)" < /dev/null > .reviews/<dir>/codex.md
-   cursor-agent -p "STANCE. $(cat .reviews/<dir>/brief.md)" --model grok-4.5-high --trust --output-format text > .reviews/<dir>/grok.md
-   agy --print "STANCE. $(cat .reviews/<dir>/brief.md)" > .reviews/<dir>/gemini.md
+   codex exec "Argue against this; find the flaws. $(cat .reviews/<dir>/brief.md)" < /dev/null > .reviews/<dir>/codex.md
+   cursor-agent -p "Steelman the strongest case for this. $(cat .reviews/<dir>/brief.md)" --model grok-4.5-high --trust --output-format text > .reviews/<dir>/grok.md
+   agy --print "Weigh both sides, then commit to a verdict. $(cat .reviews/<dir>/brief.md)" > .reviews/<dir>/gemini.md
    ```
    (`gemini -p` is dead for individual accounts — `agy --print` is the Gemini lane. Codex needs `< /dev/null` and a current CLI.)
    Rotate which vendor gets which stance between runs. Two reviewers → critical + neutral.

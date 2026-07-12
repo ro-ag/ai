@@ -84,7 +84,7 @@ Bridge rules:
 Key numbers (sources in commit history / verified 2026-07-11):
 - Grok 4.5: SWE-bench Pro **64.7%** vs Fable 5 80.4 / Opus 4.8 69.2 / GPT-5.5 58.6; Terminal-Bench 83.3 (≈parity); **#1 agentic tool use**; ~80 tok/s; very token-efficient (1.9M tok/task vs Fable 7.2M).
 - API cheap: $2/$6 per Mtok. SuperGrok $30/mo adds Grok Build CLI (reads AGENTS.md) + own quota.
-- **Caveat: hallucination rate spiked (~54% on AA-Omniscience) and community trust concerns.** Fleet role: fast second opinion and tool-heavy agentic runs — never sole authority on facts or architecture.
+- **Caveat: elevated hallucination rate and community trust concerns (no verified benchmark figure).** Fleet role: fast second opinion and tool-heavy agentic runs — never sole authority on facts or architecture.
 
 Revisit only if: Cursor quota becomes the bottleneck for Grok usage, or a future Grok clearly leads on SWE-bench-class evals. Then SuperGrok $30 (includes Grok Build CLI) is the entry point, not Heavy $300.
 
