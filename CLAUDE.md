@@ -1,6 +1,8 @@
 # AI Workspace
 
-Root workspace for AI/agent projects. These rules exist to get the best results from agents at the lowest token cost.
+Workspace for agent documentation, helpers, and small tools. These rules exist to get the best results from agents without wasting tokens.
+
+Posture: **quality first** — use the best model for work that matters; save tokens by avoiding waste (repeated work, bloated context), not by downgrading quality.
 
 ## Rule files (read on demand — do not preload)
 
@@ -18,6 +20,8 @@ Root workspace for AI/agent projects. These rules exist to get the best results 
 
 ## Hard rules
 
-- No AI attribution anywhere: no `Co-Authored-By`, no "Generated with Claude" in commits, PRs, or release notes.
+- No AI attribution anywhere, ever: no `Co-Authored-By`, no "Generated with Claude" in commits, PRs, or release notes.
+- Always create a working branch before starting work. Never commit directly to `main`.
+- If the working directory has no git repository or no associated remote: stop and ask the user how to proceed before making changes.
 - Never release, tag, push, or publish without an explicit user request in the current session.
 - Each project lives in its own subdirectory. Add a project-level CLAUDE.md only when its rules differ from these.

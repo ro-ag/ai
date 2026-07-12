@@ -1,6 +1,6 @@
 # ai
 
-Private workspace for AI/agent projects. Holds the rules that make Claude Code agents effective and cheap here.
+Private workspace for agent documentation, helpers, and tools. Holds the rules that make Claude Code agents effective and cheap here.
 
 | File | Purpose |
 |---|---|

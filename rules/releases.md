@@ -22,6 +22,13 @@ Agents NEVER release autonomously. Every release starts with an explicit user re
 4. Confirm with the user, then: `git push && git push --tags`.
 5. GitHub release: `gh release create vX.Y.Z --title "vX.Y.Z" --notes-file <notes>` — notes taken from the changelog section. No AI attribution in notes.
 
+## Package registries (npm, PyPI, crates.io, Homebrew…)
+
+- Publish from CI on tag push — never from a laptop. Reproducible builds, no local credentials.
+- Prefer OIDC "trusted publishing" (PyPI, npm provenance, crates.io tokens scoped per-repo) over long-lived tokens in secrets.
+- The GitHub release and the registry publish come from the same tag — one version, one source of truth.
+- Dry-run first when the ecosystem supports it (`npm publish --dry-run`, `cargo publish --dry-run`, `twine check`).
+
 ## Hotfixes
 
 Branch from the released tag (`hotfix/vX.Y.Z+1`), fix, PATCH bump, same flow, merge back to `main`.

@@ -7,7 +7,7 @@ Snapshot: 2026-07-11. Refresh when plugins change (`ls ~/.claude/plugins/cache/*
 | Agent | Purpose | Tools |
 |---|---|---|
 | `caveman:cavecrew-investigator` | Read-only code locator: "where is X", "what calls Y", dir maps. Compressed output, ~60% cheaper than Explore. Won't suggest fixes. | Read, Grep, Glob, Bash |
-| `caveman:cavecrew-builder` | Surgical 1–2 file edits: typos, single-function rewrites, renames. Hard-refuses 3+ file scope. | Read, Edit, Write, Grep, Glob |
+| `caveman:cavecrew-builder` | Surgical 1-2 file edits: typos, single-function rewrites, renames. Hard-refuses 3+ file scope. | Read, Edit, Write, Grep, Glob |
 | `caveman:cavecrew-reviewer` | Diff/branch/file review. One line per finding, severity-tagged, no praise. | Read, Grep, Bash |
 | `Explore` | Broad read-only fan-out search. Specify breadth: "medium" / "very thorough". Locates code, doesn't audit it. | read-only set |
 | `Plan` | Software architect: implementation plans, critical files, trade-offs. | read-only set |
