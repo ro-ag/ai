@@ -23,9 +23,10 @@ How to delegate so the main context stays small and cheap. Full inventory of wha
 3. **Parallelize.** Independent tasks → launch all agents in ONE message so they run concurrently.
 4. **Continue, don't respawn.** Use SendMessage with the agent's ID to follow up with context intact; a new Agent call starts from zero.
 5. **Don't duplicate delegated work.** Once a search is delegated, wait for the result instead of also searching inline.
-6. **Model override — quality first.** Default: omit, inherit the session model. Downgrade to haiku only for trivially mechanical fan-out (bulk renames, log greps). Never downgrade analysis, review, or planning agents to save cost.
-7. **Worktree isolation** only when agents mutate files in parallel — it costs setup time and disk.
-8. **Workflow tool** (multi-agent orchestration, can spawn dozens of agents) only on explicit user opt-in: "use a workflow" / "ultracode".
+6. **Model override — quality first.** Default: omit, inherit the session model. **NEVER use haiku — no exceptions**, not even for mechanical fan-out; grunt volume belongs to the GLM/opencode fleet instead (`rules/fleet.md`). Never downgrade analysis, review, or planning agents.
+7. **Reasoning effort:** leave at default. Pass `effort: 'high'` (or above) only when the task genuinely needs deep reasoning — hard debugging, architecture, adversarial verification. High effort on routine tasks wastes tokens and time.
+8. **Worktree isolation** only when agents mutate files in parallel — it costs setup time and disk.
+9. **Workflow tool** (multi-agent orchestration, can spawn dozens of agents) only on explicit user opt-in: "use a workflow" / "ultracode".
 
 ## Token economics
 

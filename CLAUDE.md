@@ -2,7 +2,7 @@
 
 Workspace for agent documentation, helpers, and small tools. These rules exist to get the best results from agents without wasting tokens.
 
-Posture: **quality first** — use the best model for work that matters; save tokens by avoiding waste (repeated work, bloated context), not by downgrading quality.
+Posture: **quality first** — use the best model for work that matters; save tokens by avoiding waste (repeated work, bloated context), not by downgrading quality. **Never use haiku, anywhere, for anything.** Reasoning effort stays at default unless the task needs deep reasoning.
 
 ## Rule files (read on demand — do not preload)
 
