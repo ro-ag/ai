@@ -8,5 +8,6 @@ Private workspace for agent documentation, helpers, and tools. Holds the rules t
 | `rules/agents.md` | Inventory of subagents, plugins, skills, MCP servers on this machine |
 | `rules/subagents.md` | When and how to delegate to subagents |
 | `rules/releases.md` | Release process and guardrails |
+| `rules/tooling.md` | Scouted ecosystem tools (optimizers, token trackers, linters) |
 
 Projects live in their own subdirectories.
