@@ -1,9 +1,6 @@
----
-name: second-opinion
-description: Get independent cross-vendor reviews (Codex GPT-5.x + Grok 4.5) on a diagnosis, design, or diff before committing to a big decision. Use when facing a hard bug, a risky rewrite, an architecture choice, or when the user asks for a "second opinion" / "cross-check" / "ask codex" / "ask grok".
----
-
 # Second opinion — cross-vendor review
+
+Get independent cross-vendor reviews (Codex GPT-5.x + Grok 4.5) on a diagnosis, design, or diff before committing to a big decision. Use when facing a hard bug, a risky rewrite, an architecture choice, or when the user asks for a "second opinion" / "cross-check" / "ask codex" / "ask grok".
 
 Route the question to independent models via CLI bridges, collect reports, synthesize. Reviewers see only what you give them — no conversation context.
 
