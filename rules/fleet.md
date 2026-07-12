@@ -16,6 +16,22 @@ Verified on this machine 2026-07-11. Goal: each tool does what it's best at; pre
 | Trae | Pro | `trae` | Overflow agent when others rate-limit; SOLO mode for small scoped features. |
 | Copilot CLI 1.0.68 | GitHub | `copilot` | Ambient: editor autocomplete + independent PR review pass on GitHub. |
 
+## Model glossary — Intelligence × Taste
+
+Two axes decide routing: **Intelligence** = handles complex work unsupervised; **Taste** = code quality, API design, UI/UX judgment. Ratings are working defaults, not hard limits.
+
+| Model | Intelligence | Taste | Default lane |
+|---|---|---|---|
+| Fable 5 / Opus 4.8 | ★★★★★ | ★★★★★ | Orchestration, architecture, final review, anything user-facing |
+| GPT-5.x Codex (via codex/cursor-agent) | ★★★★ | ★★★ | Hard debugging, long autonomous runs, bulk analysis |
+| Grok 4.5 (via cursor-agent) | ★★★★ | ★★★ | Fast second opinions, tool-heavy agentic runs. Hallucination caveat — never sole authority |
+| Gemini 3.1 Pro (agy/gemini) | ★★★★ | ★★★ | Giant-context sweeps, multimodal |
+| Composer 2.5 (Cursor) | ★★★ | ★★★ | Fast interactive edits in IDE |
+| GLM 5.2 (zcode) | ★★★ | ★★ | Bulk mechanical: migrations, boilerplate, mass edits |
+| Kimi K2.7 (Cursor) | ★★★ | ★★ | Overflow volume |
+
+**Escalation override (mandatory):** these lanes are defaults. If a cheaper model returns mediocre output, do NOT polish it — re-run the task on a smarter model. One clean re-run beats three patch rounds.
+
 ## Routing matrix
 
 | Task | Primary | Fallback / second pass |
