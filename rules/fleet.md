@@ -60,6 +60,17 @@ Bridge rules:
 3. Use bridges for: independent second opinions (bug diagnosis, design review), grunt routing, model-vs-model comparison on hard problems.
 4. Hard-bug protocol upgrade: Claude diagnosis + `codex exec` + Grok 4.5 via cursor-agent = three independent opinions before any big rewrite.
 
+## Grok evaluation — decided 2026-07-11
+
+**Verdict: no separate Grok subscription.** The model worth having is Grok 4.5 (shipped 2026-07-08, xAI's coding flagship) and Cursor Pro already includes it first-party — it was co-trained on Cursor data ([cursor.com/blog/grok-4-5](https://cursor.com/blog/grok-4-5)). Verified live here via `cursor-agent --model grok-4.5-fast-high`. Not available through Copilot (Grok retired there 2026-05), OpenCode Go (open models only; Grok = pay-per-token), or Trae.
+
+Key numbers (sources in commit history / verified 2026-07-11):
+- Grok 4.5: SWE-bench Pro **64.7%** vs Fable 5 80.4 / Opus 4.8 69.2 / GPT-5.5 58.6; Terminal-Bench 83.3 (≈parity); **#1 agentic tool use**; ~80 tok/s; very token-efficient (1.9M tok/task vs Fable 7.2M).
+- API cheap: $2/$6 per Mtok. SuperGrok $30/mo adds Grok Build CLI (reads AGENTS.md) + own quota.
+- **Caveat: hallucination rate spiked (~54% on AA-Omniscience) and community trust concerns.** Fleet role: fast second opinion and tool-heavy agentic runs — never sole authority on facts or architecture.
+
+Revisit only if: Cursor quota becomes the bottleneck for Grok usage, or a future Grok clearly leads on SWE-bench-class evals. Then SuperGrok $30 (includes Grok Build CLI) is the entry point, not Heavy $300.
+
 ## Cross-tool consistency
 
 - `AGENTS.md` at repo root carries the shared hard rules — Codex, Cursor, Copilot, Antigravity, Trae, and opencode all read the AGENTS.md standard. Claude Code reads `CLAUDE.md`. **Both must stay in sync.**
