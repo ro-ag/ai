@@ -24,6 +24,18 @@ Skipped on purpose: DSPy (generic prompt optimization — SkillOpt covers the sk
 3. **SkillOpt** — once we have custom skills worth training; improves quality AND compresses at the same time.
 4. **promptfoo** — regression harness when this repo's rules/skills are stable enough to protect.
 
+## PAL consensus — trialed and decided 2026-07-11
+
+**Skip installing PAL; its best idea adopted instead.** Findings from hands-on evaluation:
+- PAL `consensus` consults model APIs → needs API keys (GEMINI/OPENAI/XAI). This machine is subscription-only, zero keys — consensus would open a pay-per-token channel, against the quota strategy.
+- PAL `clink` (the keyless CLI bridge) ships with `--yolo` / `--dangerously-bypass-approvals-and-sandbox` defaults — violates our hard rules out of the box. And it duplicates our bridges.
+- **Adopted: stance steering** (critical / supportive / neutral reviewers) into the `second-opinion` skill. Live 3-vendor trial ran on subscriptions at zero marginal cost: Codex (critical) + Grok (neutral) + Gemini-via-agy (supportive) → unanimous verdict, three distinct failure modes surfaced. Pattern works without PAL.
+- Revisit PAL only if we ever hold API keys or need its threaded multi-tool workflows.
+
+## Skills policy (3-vendor consensus, unanimous)
+
+Hybrid: **"must never" → always-loaded law files (AGENTS.md/CLAUDE.md); "when X, do these steps" → skill; reference/rationale → plain markdown in rules/.** Never wholesale-convert docs to skills — always-on constraints can't live in on-demand packages, and reference docs churn too fast for skill ceremony. Next skill candidate when needed: the release ritual (`rules/releases.md` flow).
+
 ## Orchestrators + skills catalogs (deep-research 2026-07-11)
 
 Cross-vendor orchestrators (PAL MCP, Claude Code Router, claw-orchestrator) and skills catalogs (VoltAgent, anthropics/skills, trailofbits security skills) — full evaluated table with fit notes lives in `rules/research-2026-07.md`. Skills format is now a cross-vendor standard: skills written here serve the whole fleet.
