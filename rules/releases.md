@@ -2,6 +2,13 @@
 
 Agents NEVER release autonomously. Every release starts with an explicit user request in the current session. "Fix this bug" does not imply "and release it".
 
+## Branch flow (law since 2026-07-11)
+
+- All work on branches with conventional prefixes: `feat/`, `fix/`, `chore/`, `docs/` — prefixes feed changelogs later.
+- Land via **PR + squash merge**: `gh pr create` → local gates pass (tests, `/verify`, `/code-review`; Copilot reviews the PR free) → `gh pr merge --squash --delete-branch`.
+- One PR = one squashed conventional commit on `main`. History reads like a changelog; any revert is a single commit.
+- `--delete-branch` kills remote + local copies — no stale branches, ever. Branch outlives a few days → rebase it on `main`.
+
 ## Preconditions (all required)
 
 1. Clean working tree (`git status`), on the release branch (default: `main`).
