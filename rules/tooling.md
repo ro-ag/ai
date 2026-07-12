@@ -6,7 +6,7 @@ Candidate tools for better agent results + less token waste. Nothing gets instal
 
 | Tool | Category | What it does | Install | Status |
 |---|---|---|---|---|
-| [SkillOpt](https://github.com/microsoft/SkillOpt) | Skill optimizer | Trains/auto-improves skill docs: optimizer model turns scored rollouts into add/delete/replace edits, accepted only if held-out validation improves. Native Claude Code backend (`claude_code_exec`); MS reports +19.1 pts avg accuracy. Emits compact `best_skill.md` (300–2K tokens). v0.2.0 adds `skillopt-sleep` nightly self-evolution. | `pip install skillopt` | evaluate |
+| [SkillOpt](https://github.com/microsoft/SkillOpt) | Skill optimizer | Trains/auto-improves skill docs: optimizer model turns scored rollouts into add/delete/replace edits, accepted only if held-out validation improves. Native Claude Code backend (`claude_code_exec`); MS reports +19.1 pts avg accuracy. Emits compact `best_skill.md` (300–2K tokens). v0.2.0 adds `skillopt-sleep` nightly self-evolution. | `uv tool install skillopt` | **adopted** (sleep, manual cycle — see below) |
 | [ccusage](https://github.com/ryoppippi/ccusage) | Token tracking | Daily/monthly/session/5h-block token+cost reports from local JSONL; live dashboard. 17.1k stars, very active. | `npx ccusage@latest` | evaluate |
 | [promptfoo — test-agent-skills](https://www.promptfoo.dev/docs/guides/test-agent-skills/) | Skill eval harness | Regression-tests SKILL.md files via headless Claude Code runs; `skill-used` assertion proves a skill actually triggers instead of dead-weighting context. | `npx promptfoo@latest` | evaluate |
 | [claudelint](https://github.com/pdugan20/claudelint) | Config linter | 114 rules: CLAUDE.md size/bloat, circular imports, dangerous skill commands, hooks/MCP/agent config. Auto-fix plugin. Pre-1.0. | `npm i claude-code-lint` | evaluate |
@@ -23,6 +23,21 @@ Skipped on purpose: DSPy (generic prompt optimization — SkillOpt covers the sk
 2. **claudelint** — catch CLAUDE.md bloat and misconfig that silently burns input tokens every session.
 3. **SkillOpt** — once we have custom skills worth training; improves quality AND compresses at the same time.
 4. **promptfoo** — regression harness when this repo's rules/skills are stable enough to protect.
+
+## SkillOpt-Sleep — installed and verified 2026-07-11
+
+Nightly self-evolution for Claude Code: harvests session transcripts → mines recurring tasks → replays offline → proposes bounded skill/memory edits **behind a held-out validation gate**, staged for human review. Preview software; interfaces may change.
+
+Installed via `uv tool install skillopt` (binaries: `skillopt-sleep`, `skillopt-train`, `skillopt-eval`). Verified on this machine:
+- Deterministic keyless proof PASSed (consolidation improves held-out score; gate blocks harmful edits).
+- Real dry-run: harvested 110 sessions → mined 40 recurring tasks → gate correctly **rejected** the night's proposal (no checkable correctness signal in docs-only sessions). Expected per docs: gains only where tasks recur with verifiable outcomes.
+
+Usage (from the project dir):
+- `skillopt-sleep dry-run` — report only, changes nothing
+- `skillopt-sleep run` → `status` → `adopt` — full cycle, human adopts staged proposal
+- `skillopt-sleep schedule` / `unschedule` — nightly cron (NOT enabled; needs explicit user decision — burns replay quota nightly)
+
+Policy: proposals are never auto-adopted; review staged diffs before `adopt`. Revisit `skillopt-train` (full optimizer loop) when we have a skill with a scoreable task set — their protocol uses an API optimizer model, so check auth needs then.
 
 ## PAL consensus — trialed and decided 2026-07-11
 
