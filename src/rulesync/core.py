@@ -61,6 +61,10 @@ tool defaults. Hard minimum if the repo is unavailable:
 - Releases publish via GitHub Actions on tag push ONLY — never local
   `cargo publish` / `npm publish` / `twine upload`. Tests pass and tag,
   changelog, README are consistent before the release push.
+- When CI exists or is requested, keep it cheap: lint/unit on Linux only,
+  Windows gated to PRs + `main`, macOS UI tests gated to approved PRs /
+  `main` / nightly / releases. Cancel superseded PR runs, filter paths,
+  cache dependencies, and gate expensive jobs behind Linux checks (`needs:`).
 - Do not refactor unrelated code, modify unrelated files, or install new
   dependencies without approval.
 {END}"""

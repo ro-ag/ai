@@ -11,6 +11,7 @@ Posture: **quality first** — use the best model for work that matters; save to
 - `rules/agents.md` — inventory of agents, skills, and MCP servers on this machine
 - `rules/fleet.md` — multi-tool subscriptions (Codex, Cursor, GLM…) and task routing
 - `rules/second-opinion.md` — cross-vendor review via Codex / Grok / Gemini bridges
+- `rules/github-actions.md` — read BEFORE creating, editing, or auditing any CI workflow
 - `AGENTS.md` — mirrors the hard rules for the non-Claude tools in the fleet; keep in sync with this file
 
 ## Token discipline
@@ -29,7 +30,7 @@ Posture: **quality first** — use the best model for work that matters; save to
 - If the working directory has no git repository or no associated remote: stop and ask the user how to proceed before making changes.
 - Never release, tag, push, or publish without an explicit user request in the current session.
 - Releases publish via GitHub Actions on tag push ONLY — never locally (`cargo publish`, `npm publish`, `twine upload`, hand-run `gh release create`). Tag + changelog + README consistent, tests passing, before the release push.
-- GitHub Actions only when explicitly asked, and only triggered on merge to `main` / release tags — never per-push or per-PR. Quality gates run locally before merge.
+- GitHub Actions only when explicitly asked, and only triggered on merge to `main` / release tags — never per-push or per-PR. Quality gates run locally before merge. When CI exists or is requested, enforce the cost rules in `rules/github-actions.md` (Linux-first, gated Windows/macOS, concurrency cancellation, path filters, caches, staged jobs).
 - Each project lives in its own subdirectory. Add a project-level CLAUDE.md only when its rules differ from these.
 
 ## Language rules
