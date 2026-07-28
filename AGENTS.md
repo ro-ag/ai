@@ -10,7 +10,7 @@ Shared rules for every AI coding tool on this machine (Codex, Cursor, Copilot, A
 - If the working directory has no git repository or no associated remote: stop and ask the user before making changes.
 - Never release, tag, push, or publish without an explicit user request in the current session.
 - Releases publish via GitHub Actions on tag push ONLY — never locally (no local `cargo publish`, `npm publish`, `twine upload`, no hand-run `gh release create`). Tag + changelog + README consistent and tests passing before the release push.
-- GitHub Actions cost money on private repos: never add or enable a workflow unless explicitly asked. When one exists, it triggers on merge to `main` or on release tags only — never on every push or PR update. Quality gates run locally (tests, lint, review) before merge instead.
+- GitHub Actions cost money on private repos: never add or enable a workflow unless explicitly asked. When one exists, it triggers on merge to `main` or on release tags only — never on every push or PR update. Quality gates run locally (tests, lint, review) before merge instead. When CI exists or is requested, enforce the cost rules in `rules/github-actions.md`: lint/unit on Linux only, Windows gated to PRs + `main`, macOS UI/AppKit gated to approved PRs / `main` / nightly / releases, cancel superseded PR runs, path filters, dependency caches, expensive jobs `needs:` cheap Linux gates.
 
 ## Language rules
 
@@ -19,6 +19,6 @@ Shared rules for every AI coding tool on this machine (Codex, Cursor, Copilot, A
 ## Workspace
 
 - Purpose: agent documentation, helpers, and small tools. Each project in its own subdirectory.
-- Release process: `rules/releases.md`. Tool fleet and task routing: `rules/fleet.md`.
+- Release process: `rules/releases.md`. Tool fleet and task routing: `rules/fleet.md`. CI cost rules: `rules/github-actions.md`.
 - Posture: quality first — save tokens by avoiding waste, not by downgrading model quality on work that matters.
 - When hard rules change: re-run `uv run rulesync`, and keep the pointer BLOCK in `src/rulesync/core.py` in step — it is the condensed "hard minimum" copy of these rules.
