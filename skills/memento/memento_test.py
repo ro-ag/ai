@@ -1,4 +1,4 @@
-"""Tests for memento.py — run: uv run python -m unittest discover memento"""
+"""Tests for memento.py — run: uv run pytest skills/memento/"""
 
 import io
 import os
@@ -107,6 +107,13 @@ class MementoTest(unittest.TestCase):
         self.assertEqual(memento.ai_dir(), self.ai)
         os.environ["MEMENTO_AI_DIR"] = str(self.tmp.name)
         self.assertEqual(memento.ai_dir(), Path(self.tmp.name))
+
+    def test_ai_dir_survives_malformed_config(self):
+        os.environ.pop("MEMENTO_AI_DIR")
+        self.home.mkdir(parents=True, exist_ok=True)
+        for bad in ("{not json", '["list", "not", "dict"]'):
+            (self.home / "config.json").write_text(bad)
+            self.assertEqual(memento.ai_dir(), self.home)
 
     def test_remind_matches_correction_signals(self):
         import json
