@@ -75,14 +75,14 @@ This still tests `target/debug/my-app`; packaging only copies that binary into
 an application bundle.
 
 Target the absolute `.app` path first. For example, with a native computer-use
-API:
+API (`ctl` stands for your controller's client object throughout):
 
 ```js
-var state = await sky.get_app_state({
+var state = await ctl.get_app_state({
   app: "/tmp/my-app-bundle/MyApp.app",
   disableDiff: true,
 });
-nodeRepl.write(state.text);
+console.log(state.text);
 ```
 
 An app name or bundle identifier may work after Launch Services has seen the
@@ -160,8 +160,8 @@ are separate workflows and require their normal authorization.
 Start every control session by reading fresh app state:
 
 ```js
-var state = await sky.get_app_state({ app: appPath, disableDiff: true });
-nodeRepl.write(state.text);
+var state = await ctl.get_app_state({ app: appPath, disableDiff: true });
+console.log(state.text);
 ```
 
 Then:
@@ -179,9 +179,9 @@ Then:
 Example:
 
 ```js
-await sky.press_key({ app: appPath, key: "super+alt+v" });
-state = await sky.get_app_state({ app: appPath });
-nodeRepl.write(state.text);
+await ctl.press_key({ app: appPath, key: "super+alt+v" });
+state = await ctl.get_app_state({ app: appPath });
+console.log(state.text);
 ```
 
 Raw custom-rendered surfaces often expose only the window and menu bar through

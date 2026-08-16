@@ -49,7 +49,10 @@ def ai_dir() -> Path:
         return Path(os.environ["MEMENTO_AI_DIR"]).expanduser()
     cfg = global_ledger().parent / "config.json"
     if cfg.exists():
-        rules_dir = json.loads(cfg.read_text()).get("rules_dir")
+        try:
+            rules_dir = json.loads(cfg.read_text()).get("rules_dir")
+        except (json.JSONDecodeError, AttributeError):
+            rules_dir = None
         if rules_dir:
             return Path(rules_dir).expanduser()
     return global_ledger().parent

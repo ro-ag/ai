@@ -47,4 +47,4 @@ python3 "$DEST/memento.py" check >/dev/null
 echo "memento installed."
 echo "  CLI    : python3 ~/.agents/memento/memento.py check"
 echo "  skills : ~/.claude/skills/memento (Claude), ~/.agents/skills/memento (Codex/Copilot/Gemini)"
-echo "  Cursor/Kimi/opencode/...: paste the AGENTS.md pointer snippet (skills/memento/README.md)"
+echo "  Cursor/Kimi/opencode/...: paste the AGENTS.md pointer snippet — https://github.com/$REPO/tree/$BRANCH/skills/memento#per-tool-pickup"

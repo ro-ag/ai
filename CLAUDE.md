@@ -31,7 +31,7 @@ Posture: **quality first** — use the best model for work that matters; save to
 
 - Do not refactor code unrelated to the task. Do not modify unrelated files. Do not install new dependencies without explicit approval.
 - No AI attribution anywhere, ever: no `Co-Authored-By`, no "Generated with …" in commits, PRs, or release notes.
-- Always create a working branch before starting work. Never commit directly to `main`. Branches land via PR + squash merge: `gh pr merge --squash --delete-branch`. Never leave any branch but `main` in local or remote after merging.
+- Always create a working branch before starting work. Never commit directly to `main`/`master`. Branches land via PR + squash merge: `gh pr merge --squash --delete-branch`. Never leave any branch but `main` in local or remote after merging.
 - If the working directory has no git repository or no associated remote: stop and ask the user how to proceed before making changes.
 - Never release, tag, push, or publish without an explicit user request in the current session.
 - Releases publish via GitHub Actions on tag push ONLY — never locally (`cargo publish`, `npm publish`, `twine upload`, hand-run `gh release create`). Tag + changelog + README consistent, tests passing, before the release push.

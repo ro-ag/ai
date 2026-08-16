@@ -34,6 +34,6 @@ Layout: **`rules/` is law** — constraints that always apply, loaded via pointe
 |---|---|
 | `uv run rulesync` (or `uv run main.py`) | Sync the "read this repo first" pointer block into every AI tool's global instructions file (claude, codex, cursor, zcode, agy, trae, opencode, copilot) and force Copilot's `includeCoAuthoredBy` to false. Interactive by default: status table → pick tools → preview → confirm. `--dry-run` previews, `--yes` applies without prompts, `--tool NAME` targets specific tools. Idempotent; re-run after changing hard rules. |
 
-Quality gates run locally before merge: `uv run pytest`, `ruff check`.
+Quality gates run locally before merge: `uv run pytest`, `uvx ruff check .`.
 
 Projects live in their own subdirectories.
