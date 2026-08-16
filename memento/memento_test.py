@@ -98,6 +98,16 @@ class MementoTest(unittest.TestCase):
         out = self.run_cmd("top")
         self.assertLess(out.index("often"), out.index("rare"))
 
+    def test_ai_dir_falls_back_to_config_then_ledger_dir(self):
+        import json
+        os.environ.pop("MEMENTO_AI_DIR")
+        self.assertEqual(memento.ai_dir(), self.home)
+        self.home.mkdir(parents=True, exist_ok=True)
+        (self.home / "config.json").write_text(json.dumps({"rules_dir": str(self.ai)}))
+        self.assertEqual(memento.ai_dir(), self.ai)
+        os.environ["MEMENTO_AI_DIR"] = str(self.tmp.name)
+        self.assertEqual(memento.ai_dir(), Path(self.tmp.name))
+
     def test_remind_matches_correction_signals(self):
         import json
         from unittest.mock import patch
