@@ -10,6 +10,8 @@ Leonard tattooed what he couldn't afford to forget. Same deal here. Every mistak
 curl -fsSL https://raw.githubusercontent.com/ro-ag/ai/main/skills/memento/install.sh | sh
 ```
 
+Pin a release instead of tracking `main`: `MEMENTO_BRANCH=v0.3.0 sh` (swap the branch in the URL too).
+
 Private fork? Same script via `gh` (or set `GH_TOKEN` and use curl):
 
 ```bash
