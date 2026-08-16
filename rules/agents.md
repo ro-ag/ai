@@ -39,9 +39,9 @@ Snapshot: 2026-07-11. Refresh when plugins change (`ls ~/.claude/plugins/cache/*
 - **Figma** (read designs, generate designs, Code Connect) + **Canva** (design/export/brand templates)
 - **Gmail**, **Google Calendar**
 - **Claude Browser** (in-app), **claude-in-chrome** (real Chrome, logged-in sessions), **Control Chrome**, **chrome-devtools** (debugging/performance), **computer-use** (native desktop apps)
-- **Hugging Face** (hub search, papers, spaces; user `r0d0x`)
+- **Hugging Face** (hub search, papers, spaces)
 - **shadcn/ui** (components, blocks, themes), **mermaid** (diagram validation), **PowerPoint**, **pdf-viewer**
-- **TurboTax**, **scheduled-tasks**, **mcp-registry** (find more connectors)
+- **scheduled-tasks**, **mcp-registry** (find more connectors)
 
 ## Choosing between browser surfaces
 
