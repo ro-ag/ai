@@ -2,6 +2,7 @@
 name = "ai-workspace-tools"
 version = "0.2.0"
 description = "Helper tools for the agent rules workspace"
+license = "MIT"
 requires-python = ">=3.12"
 dependencies = [
     "rich>=13",
