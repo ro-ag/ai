@@ -2,7 +2,7 @@
 
 Cross-agent "learn from mistakes" system. Agents have no long-term memory, so the rules that must never be forgotten get tattooed: repeated mistakes, hard-won fixes, and ignored quality gates go into ledgers; recurrence is counted and cost-scored; repeat offenders are promoted automatically into enforced rules in `AGENTS.md`/`CLAUDE.md`.
 
-Protocol lives in [SKILL.md](SKILL.md) (CONSULT → LOG → PROMOTE). The skill ships as **markdown only** — the full `memento.py` source travels in its Appendix and is bootstrapped to `~/.agents/memento/memento.py` on first use. The canonical script here and the Appendix are kept byte-identical by `memento_test.py`.
+Protocol lives in [SKILL.md](SKILL.md) (CONSULT → LOG → PROMOTE). The skill ships as **markdown only** — the full `memento.py` source travels in [BOOTSTRAP.md](BOOTSTRAP.md) and is bootstrapped to `~/.agents/memento/memento.py` on first use. SKILL.md stays slim (~80 lines) so loading the skill never re-reads the ~300-line script; agents open BOOTSTRAP.md only when the CLI is missing. The canonical script and the BOOTSTRAP.md block are kept byte-identical by `memento_test.py`.
 
 ## Layout
 
@@ -32,14 +32,14 @@ Alerts: 3 hits, or ≥30 min lost in one hit → `PROMOTE: run memento promote <
 
 ## Install — the easy way (any machine)
 
-One block. Point `REPO` at your clone (or at any directory holding `SKILL.md` + `memento.py`; no clone at all → copy the SKILL.md appendix to `~/.agents/memento/memento.py` and skip the `cp`):
+One block. Point `REPO` at your clone (or at any directory holding the skill files; no clone at all → copy the BOOTSTRAP.md code block to `~/.agents/memento/memento.py` and skip the `cp`):
 
 ```bash
 REPO=~/dev/ai/memento
 mkdir -p ~/.agents/memento ~/.agents/skills/memento ~/.claude/skills/memento
 cp "$REPO/memento.py" ~/.agents/memento/memento.py
-ln -sf "$REPO/SKILL.md" ~/.claude/skills/memento/SKILL.md   # Claude Code
-ln -sf "$REPO/SKILL.md" ~/.agents/skills/memento/SKILL.md   # Codex, Copilot CLI, Gemini CLI
+ln -sf "$REPO"/{SKILL,BOOTSTRAP}.md ~/.claude/skills/memento/   # Claude Code
+ln -sf "$REPO"/{SKILL,BOOTSTRAP}.md ~/.agents/skills/memento/   # Codex, Copilot CLI, Gemini CLI
 # optional: where global promoted rules land (default: ~/.agents/memento/)
 printf '{"rules_dir": "%s"}\n' "$HOME/dev/ai" > ~/.agents/memento/config.json
 ```
@@ -71,7 +71,7 @@ Pointer snippet for tools without skill support — paste into their global `AGE
 - Full protocol: ~/.agents/skills/memento/SKILL.md
 ```
 
-After changing `memento.py`: re-run tests, re-inject the SKILL.md appendix, and re-copy to `~/.agents/memento/`.
+After changing `memento.py`: re-run tests, re-inject the BOOTSTRAP.md code block, and re-copy to `~/.agents/memento/`.
 
 ## Claude Code hooks (optional, recommended — makes CONSULT/LOG automatic)
 
