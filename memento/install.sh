@@ -3,11 +3,11 @@
 # for Claude Code, Codex, Copilot CLI, Gemini CLI (skill dirs). Cursor/Kimi/etc.:
 # paste the AGENTS.md pointer snippet from README.md afterwards.
 #
-# Private repo:  gh api repos/ro-ag/ai/contents/memento/install.sh -H "Accept: application/vnd.github.raw" | sh
-# Public repo:   curl -fsSL https://raw.githubusercontent.com/ro-ag/ai/main/memento/install.sh | sh
+# Install:       curl -fsSL https://raw.githubusercontent.com/ro-ag/ai/main/memento/install.sh | sh
+# Private fork:  gh api repos/YOU/FORK/contents/memento/install.sh -H "Accept: application/vnd.github.raw" | MEMENTO_REPO=YOU/FORK sh
 #
 # Env: MEMENTO_REPO (default ro-ag/ai), MEMENTO_BRANCH (default main),
-#      GH_TOKEN (for curl against a private repo), MEMENTO_RULES_DIR (optional
+#      GH_TOKEN (for curl against a private fork), MEMENTO_RULES_DIR (optional
 #      config.json rules_dir for global promoted rules).
 set -eu
 
@@ -29,7 +29,7 @@ fetch() { # $1 = filename, $2 = destination path
             -H "Accept: application/vnd.github.raw" >"$2" 2>/dev/null; then
         return 0
     fi
-    echo "memento install: cannot fetch $1 — private repo needs GH_TOKEN or the gh CLI logged in" >&2
+    echo "memento install: cannot fetch $1 — check network; a private fork needs GH_TOKEN or the gh CLI logged in" >&2
     exit 1
 }
 

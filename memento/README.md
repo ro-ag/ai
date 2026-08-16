@@ -7,13 +7,13 @@ Leonard tattooed what he couldn't afford to forget. Same deal here. Every mistak
 ## Install — one shot, no clone
 
 ```bash
-gh api repos/ro-ag/ai/contents/memento/install.sh -H "Accept: application/vnd.github.raw" | sh
+curl -fsSL https://raw.githubusercontent.com/ro-ag/ai/main/memento/install.sh | sh
 ```
 
-or with a token (plain curl works as-is if the repo ever goes public):
+Private fork? Same script via `gh` (or set `GH_TOKEN` and use curl):
 
 ```bash
-curl -fsSL -H "Authorization: token $GH_TOKEN" https://raw.githubusercontent.com/ro-ag/ai/main/memento/install.sh | sh
+gh api repos/YOU/YOUR-FORK/contents/memento/install.sh -H "Accept: application/vnd.github.raw" | MEMENTO_REPO=YOU/YOUR-FORK sh
 ```
 
 [install.sh](install.sh) fetches `memento.py` + the two skill markdown files into `~/.agents/memento` and both skill dirs (Claude, Codex/Copilot/Gemini); set `MEMENTO_RULES_DIR=~/dev/ai` before it to also write `config.json`. Cursor/Kimi/opencode & co.: paste the pointer snippet from the per-tool section below.
@@ -32,7 +32,7 @@ Protocol lives in [SKILL.md](SKILL.md) (CONSULT → LOG → PROMOTE). The skill 
 | Enforcement docs, global scope | `~/dev/ai/AGENTS.md` + `CLAUDE.md`, section `## Memento-enforced` |
 | Enforcement docs, project scope | project `AGENTS.md` (+ `CLAUDE.md` if present) |
 
-Global rules dir resolution: env `MEMENTO_AI_DIR` → `rules_dir` in `~/.agents/memento/config.json` → `~/.agents/memento/` itself. This machine uses config.json pointing at `~/dev/ai`. `MEMENTO_HOME` overrides the global ledger dir (tests use it). SKILL.md stays ultra generic — machine specifics live only in config.json.
+Global rules dir resolution: env `MEMENTO_AI_DIR` → `rules_dir` in `~/.agents/memento/config.json` → `~/.agents/memento/` itself. Point config.json at your rules repo (e.g. `~/dev/ai`). `MEMENTO_HOME` overrides the global ledger dir (tests use it). SKILL.md stays ultra generic — machine specifics live only in config.json.
 
 ## Commands
 

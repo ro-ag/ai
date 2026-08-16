@@ -26,7 +26,7 @@ from pathlib import Path
 
 THRESHOLD = 3          # hits that trigger a promote alert
 COST_TRIGGER = 30      # minutes lost in one hit that trigger a promote alert
-SIGNALS = re.compile(r"again|told you|how many times|every time|stop doing|as always", re.I)
+SIGNALS = re.compile(r"again|told you|how many times|every time|stop doing|as always", re.IGNORECASE)
 KINDS = ("habit", "trick", "gate", "project-way")
 SECTION = "## Memento-enforced"
 FIELDS = ("kind", "scope", "rule", "fix", "hits", "cost", "status")
@@ -166,7 +166,7 @@ def cmd_hit(args) -> None:
         found = (scope, path, entries)
     label, path, entries = found
     e = entries[args.slug]
-    e["hits"].append(datetime.date.today().isoformat())
+    e["hits"].append(datetime.datetime.now(datetime.UTC).astimezone().date().isoformat())
     e["cost"] += hit_cost
     if args.rule:
         e["rule"] = args.rule
