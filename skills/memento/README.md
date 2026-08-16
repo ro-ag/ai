@@ -7,13 +7,13 @@ Leonard tattooed what he couldn't afford to forget. Same deal here. Every mistak
 ## Install — one shot, no clone
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/ro-ag/ai/main/memento/install.sh | sh
+curl -fsSL https://raw.githubusercontent.com/ro-ag/ai/main/skills/memento/install.sh | sh
 ```
 
 Private fork? Same script via `gh` (or set `GH_TOKEN` and use curl):
 
 ```bash
-gh api repos/YOU/YOUR-FORK/contents/memento/install.sh -H "Accept: application/vnd.github.raw" | MEMENTO_REPO=YOU/YOUR-FORK sh
+gh api repos/YOU/YOUR-FORK/contents/skills/memento/install.sh -H "Accept: application/vnd.github.raw" | MEMENTO_REPO=YOU/YOUR-FORK sh
 ```
 
 [install.sh](install.sh) fetches `memento.py` + the two skill markdown files into `~/.agents/memento` and both skill dirs (Claude, Codex/Copilot/Gemini); set `MEMENTO_RULES_DIR=~/dev/ai` before it to also write `config.json`. Cursor/Kimi/opencode & co.: paste the pointer snippet from the per-tool section below.
@@ -54,7 +54,7 @@ Alerts: 3 hits, or ≥30 min lost in one hit → `PROMOTE: run memento promote <
 One block. Point `REPO` at your clone (or at any directory holding the skill files; no clone at all → copy the BOOTSTRAP.md code block to `~/.agents/memento/memento.py` and skip the `cp`):
 
 ```bash
-REPO=~/dev/ai/memento
+REPO=~/dev/ai/skills/memento
 mkdir -p ~/.agents/memento ~/.agents/skills/memento ~/.claude/skills/memento
 cp "$REPO/memento.py" ~/.agents/memento/memento.py
 ln -sf "$REPO"/{SKILL,BOOTSTRAP}.md ~/.claude/skills/memento/   # Claude Code

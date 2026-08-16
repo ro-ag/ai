@@ -1,3 +1,8 @@
+---
+name: rust-gui-control
+description: Use when remote-controlling, driving, testing, or screen-capturing a Rust GUI app on macOS with computer-use or app-control tools — especially when a cargo-built binary draws a window but the controller cannot find or target it ("Invalid app", missing from app inventory), when pointer/hover actions miss or do not register, or when exact-pixel window captures are needed for visual verification.
+---
+
 # Remote-controlling Rust GUI apps on macOS
 
 Native app-control tools can reliably target a Rust GUI only when macOS sees the
