@@ -1,5 +1,7 @@
 # ai
 
+[![release](https://img.shields.io/github/v/release/ro-ag/ai)](https://github.com/ro-ag/ai/releases) [![license](https://img.shields.io/github/license/ro-ag/ai)](LICENSE)
+
 Workspace for agent documentation, helpers, and small tools — the rules that make AI coding agents effective and cheap. One repo is the single source of truth; every tool on the machine (Claude Code, Codex, Cursor, Copilot, …) gets pointed at it.
 
 Layout: **`rules/` is law** — constraints that always apply, loaded via pointers in the core files. **`skills/` is procedure** — invocable know-how, triggered when the task matches, installable into each tool's skill directory.

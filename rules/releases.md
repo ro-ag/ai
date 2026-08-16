@@ -17,6 +17,14 @@ Branching and landing: `rules/git-workflow.md`. CI cost rules: `rules/github-act
 - Semver: MAJOR = breaking, MINOR = feature, PATCH = fix.
 - Pre-1.0: breaking changes allowed in MINOR, but must be called out explicitly in the changelog.
 
+## Version stamping
+
+The version lives in exactly two places: the project manifest and the `CHANGELOG.md` heading. Nowhere else.
+
+- README carries a dynamic release badge (shields.io reads the latest GitHub release) — never a hardcoded version string.
+- Rules and skills docs are living documents: the git tag captures their state; no per-file version headers or date stamps.
+- Installers that fetch from the repo accept a ref (branch env var, tag) so consumers can pin a release instead of tracking `main`.
+
 ## Flow
 
 1. Bump version in the project manifest + update `CHANGELOG.md`.
