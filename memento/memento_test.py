@@ -118,12 +118,14 @@ class MementoTest(unittest.TestCase):
                 memento.main(["remind"])
             self.assertEqual("memento" in out.getvalue(), expect, prompt)
 
-    def test_skill_appendix_matches_script(self):
-        skill = (Path(__file__).parent / "SKILL.md").read_text()
-        appendix = skill.split("<!-- appendix-start -->\n```python\n", 1)[1]
+    def test_bootstrap_appendix_matches_script(self):
+        boot = (Path(__file__).parent / "BOOTSTRAP.md").read_text()
+        appendix = boot.split("<!-- appendix-start -->\n```python\n", 1)[1]
         appendix = appendix.split("```\n<!-- appendix-end -->", 1)[0]
         script = (Path(__file__).parent / "memento.py").read_text()
-        self.assertEqual(appendix, script, "SKILL.md appendix out of sync with memento.py")
+        self.assertEqual(appendix, script, "BOOTSTRAP.md appendix out of sync with memento.py")
+        skill = (Path(__file__).parent / "SKILL.md").read_text()
+        self.assertNotIn("```python", skill, "SKILL.md must stay slim — script lives in BOOTSTRAP.md")
 
 
 if __name__ == "__main__":

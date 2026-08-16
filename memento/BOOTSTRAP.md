@@ -1,3 +1,9 @@
+# Memento bootstrap
+
+Read this file ONLY when `~/.agents/memento/memento.py` is missing. Copy the code block below verbatim to that path, then return to SKILL.md — nothing else here.
+
+<!-- appendix-start -->
+```python
 #!/usr/bin/env python3
 """Memento — cross-agent mistake ledger.
 
@@ -294,3 +300,5 @@ def main(argv=None) -> None:
 
 if __name__ == "__main__":
     main()
+```
+<!-- appendix-end -->
