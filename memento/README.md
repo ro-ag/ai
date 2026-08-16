@@ -1,6 +1,24 @@
 # Memento
 
-Cross-agent "learn from mistakes" system. Agents have no long-term memory, so the rules that must never be forgotten get tattooed: repeated mistakes, hard-won fixes, and ignored quality gates go into ledgers; recurrence is counted and cost-scored; repeat offenders are promoted automatically into enforced rules in `AGENTS.md`/`CLAUDE.md`.
+Your AI agent has the memory of Leonard from *Memento* — or Lucy from *50 First Dates*, pick your movie. Every session it wakes up fresh, absolutely convinced it is a genius, and commits the exact same crime you already yelled about three times this week: bare `pip` in a uv project, "let's skip the coverage gate just this once", a full hour re-discovering the SSL fix it already found on Tuesday. And every rerun of that amnesia is billed to you, by the token.
+
+Memento is the tattoo kit. Leonard inked the facts he couldn't afford to lose; here, mistakes get inked into ledgers the moment they happen — recurrence counted, minutes lost scored — and once something hits three times (or burns 30+ minutes, or you scream "ALWAYS"), it stops being a gentle lesson and becomes law, written into the rule files every agent is forced to read at startup. The agent doesn't need to remember. The tattoos do. Your wallet sends its regards.
+
+## Install — one shot, no clone
+
+```bash
+gh api repos/ro-ag/ai/contents/memento/install.sh -H "Accept: application/vnd.github.raw" | sh
+```
+
+or with a token (plain curl works as-is if the repo ever goes public):
+
+```bash
+curl -fsSL -H "Authorization: token $GH_TOKEN" https://raw.githubusercontent.com/ro-ag/ai/main/memento/install.sh | sh
+```
+
+[install.sh](install.sh) fetches `memento.py` + the two skill markdown files into `~/.agents/memento` and both skill dirs (Claude, Codex/Copilot/Gemini); set `MEMENTO_RULES_DIR=~/dev/ai` before it to also write `config.json`. Cursor/Kimi/opencode & co.: paste the pointer snippet from the per-tool section below.
+
+## How it works
 
 Protocol lives in [SKILL.md](SKILL.md) (CONSULT → LOG → PROMOTE). The skill ships as **markdown only** — the full `memento.py` source travels in [BOOTSTRAP.md](BOOTSTRAP.md) and is bootstrapped to `~/.agents/memento/memento.py` on first use. SKILL.md stays slim (~80 lines) so loading the skill never re-reads the ~300-line script; agents open BOOTSTRAP.md only when the CLI is missing. The canonical script and the BOOTSTRAP.md block are kept byte-identical by `memento_test.py`.
 
@@ -30,17 +48,7 @@ memento remind               # hook helper: stdin JSON, nudges on correction sig
 
 Alerts: 3 hits, or ≥30 min lost in one hit → `PROMOTE: run memento promote <slug>`.
 
-## Install — the easy way (any machine)
-
-### No clone: one command
-
-```bash
-gh api repos/ro-ag/ai/contents/memento/install.sh -H "Accept: application/vnd.github.raw" | sh
-```
-
-(Repo is private, so the `gh` form. With a token instead: `curl -fsSL -H "Authorization: token $GH_TOKEN" https://raw.githubusercontent.com/ro-ag/ai/main/memento/install.sh | sh` — plain curl works as-is if the repo ever goes public.) [install.sh](install.sh) fetches `memento.py` + the two skill markdown files into `~/.agents/memento` and both skill dirs; set `MEMENTO_RULES_DIR=~/dev/ai` before it to also write `config.json`.
-
-### From a clone
+## Install from a clone
 
 One block. Point `REPO` at your clone (or at any directory holding the skill files; no clone at all → copy the BOOTSTRAP.md code block to `~/.agents/memento/memento.py` and skip the `cp`):
 
