@@ -1,7 +1,7 @@
 # GitHub Actions — cost rules
 
-Runner minutes are billed roughly **Linux 1x, Windows 2x, macOS 10x** (10x on
-private repos). Every rule below follows from that.
+Private repos pay for runner minutes (2,000/mo free tier), billed roughly
+**Linux 1x, Windows 2x, macOS 10x**. Every rule below follows from that.
 
 ## Default posture (hard rule)
 
@@ -11,6 +11,8 @@ private repos). Every rule below follows from that.
   before merge instead.
 - When the user does ask for CI (or a repo already has workflows), enforce
   everything below.
+- Heavy or regular CI need → a self-hosted runner (free minutes, fine for own
+  private repos) before paying for hosted minutes.
 
 ## Runner placement
 
@@ -34,6 +36,8 @@ private repos). Every rule below follows from that.
 - **Path filters:** skip CI on irrelevant changes (`paths-ignore: ['**/*.md', 'docs/**']`,
   or scoped `paths:` in monorepos). Never filter release or nightly workflows —
   those must always run.
+- **Timeouts:** every job sets `timeout-minutes` low enough that a hung job
+  cannot burn an hour of minutes.
 - **Caches:** every setup step caches dependencies — `setup-node` (`cache: npm`),
   `setup-python` (`cache: pip`/`poetry`), `setup-go` (on by default v5+),
   `setup-java` (`cache: maven`/`gradle`); `actions/cache` keyed on the lockfile

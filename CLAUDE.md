@@ -6,6 +6,7 @@ Posture: **quality first** — use the best model for work that matters; save to
 
 ## Rule files (read on demand — do not preload)
 
+- `rules/git-workflow.md` — branch, land, and clean up; the detail behind the git hard rules
 - `rules/subagents.md` — read BEFORE delegating work to any subagent
 - `rules/releases.md` — read BEFORE any release, tag, or publish action
 - `rules/github-actions.md` — read BEFORE creating, editing, or auditing any CI workflow
@@ -20,6 +21,11 @@ Posture: **quality first** — use the best model for work that matters; save to
 - Batch independent tool calls in a single message so they run in parallel.
 - Read only the line ranges you need from large files; never re-read files already in context.
 - Keep this file under ~50 lines. Details belong in `rules/`, loaded on demand.
+
+## Chat vs build
+
+- Detect intent before acting: a question, an opinion request, thinking out loud, or a stream of ideas is a conversation, not a work order. Answer, discuss, wait. No branching, editing, or scaffolding until the user asks for the change or the idea is fully shaped.
+- Rushing to code mid-discussion buries the user's next thought under diffs. Stay in the conversation while ideas keep coming; build when direction is confirmed.
 
 ## Hard rules
 

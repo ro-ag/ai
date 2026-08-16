@@ -2,12 +2,7 @@
 
 Agents NEVER release autonomously. Every release starts with an explicit user request in the current session. "Fix this bug" does not imply "and release it".
 
-## Branch flow (law since 2026-07-11)
-
-- All work on branches with conventional prefixes: `feat/`, `fix/`, `chore/`, `docs/` — prefixes feed changelogs later.
-- Land via **PR + squash merge**: `gh pr create` → local gates pass (tests, `/verify`, `/code-review`; Copilot reviews the PR free) → `gh pr merge --squash --delete-branch`.
-- One PR = one squashed conventional commit on `main`. History reads like a changelog; any revert is a single commit.
-- **Never leave branches other than `main` in local OR remote once merged.** `gh pr merge --squash --delete-branch` + `git fetch --prune` every time; check `git branch -a` shows only `main` after landing. Branch outlives a few days → rebase it on `main`.
+Branching and landing: `rules/git-workflow.md`. CI cost rules: `rules/github-actions.md`.
 
 ## Preconditions (all required)
 
@@ -29,15 +24,6 @@ Agents NEVER release autonomously. Every release starts with an explicit user re
 3. Annotated tag: `git tag -a vX.Y.Z -m "vX.Y.Z"`.
 4. Confirm with the user, then: `git push && git push --tags`.
 5. The tag push triggers the release workflow — GitHub Actions creates the GitHub Release (notes from the changelog section) and publishes artifacts/registries. **Releases ALWAYS go through GitHub Actions. NEVER publish from a laptop — no local `cargo publish`, `npm publish`, `twine upload`, `goreleaser`, or hand-run `gh release create`.** The laptop's last release action is pushing the tag. No AI attribution in notes.
-
-## CI cost policy (GitHub Actions on private repos)
-
-Actions minutes are paid on private repos (2,000/mo free tier; macOS runners burn a 10× multiplier). Therefore:
-
-- **No workflows unless the user explicitly asks.** Default quality gates are local: tests + `/verify` + `/code-review` + Copilot PR review (Copilot review is subscription-included, not Actions minutes).
-- When a workflow is justified, triggers are merge/tag only: `on: push: branches: [main]` and `on: push: tags: ['v*']`. Never `pull_request` or per-push on feature branches.
-- Workflow hygiene: `ubuntu-latest` runners only (never macOS unless the build requires it), `timeout-minutes` set low, `concurrency` with `cancel-in-progress`, path filters to skip doc-only changes.
-- Heavy/regular CI need later → self-hosted runner (free minutes, fine for own private repos) before paying for hosted minutes.
 
 ## Package registries (npm, PyPI, crates.io, Homebrew…)
 
