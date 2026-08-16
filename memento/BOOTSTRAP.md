@@ -32,7 +32,9 @@ from pathlib import Path
 
 THRESHOLD = 3          # hits that trigger a promote alert
 COST_TRIGGER = 30      # minutes lost in one hit that trigger a promote alert
-SIGNALS = re.compile(r"again|told you|how many times|every time|stop doing|as always", re.IGNORECASE)
+SIGNALS = re.compile(
+    r"again|told you|how many times|every time|stop doing|as always"
+    r"|i said|once more|we discussed|not the first time", re.IGNORECASE)
 KINDS = ("habit", "trick", "gate", "project-way")
 SECTION = "## Memento-enforced"
 FIELDS = ("kind", "scope", "rule", "fix", "hits", "cost", "status")
@@ -153,6 +155,19 @@ def append_rule(doc: Path, slug: str, rule: str) -> bool:
     return True
 
 
+def remove_rule(doc: Path, slug: str) -> bool:
+    """Drop the rule bullet carrying this slug's marker from doc."""
+    marker = f"(memento: {slug})"
+    if not doc.exists():
+        return False
+    lines = doc.read_text(encoding="utf-8").splitlines()
+    kept = [ln for ln in lines if marker not in ln]
+    if len(kept) == len(lines):
+        return False
+    doc.write_text("\n".join(kept) + "\n", encoding="utf-8")
+    return True
+
+
 def cmd_hit(args) -> None:
     hit_cost = args.cost or 0
     found = find(args.slug, args.project)
@@ -170,10 +185,17 @@ def cmd_hit(args) -> None:
         entries = parse(path)
         entries[args.slug] = new_entry(args.slug) | {"scope": scope, "kind": args.kind or "habit"}
         found = (scope, path, entries)
+    else:
+        holders = [l for l, p in ledgers(args.project) if args.slug in parse(p)]
+        if len(holders) > 1:
+            print(f"note: '{args.slug}' exists in both ledgers — logging to {holders[0]} (project shadows global)")
     label, path, entries = found
     e = entries[args.slug]
     e["hits"].append(datetime.datetime.now(datetime.UTC).astimezone().date().isoformat())
     e["cost"] += hit_cost
+    if e["status"] == "retired":
+        e["status"] = "watching"
+        print(f"{e['slug']}: retired rule hit again — revived to watching")
     if args.rule:
         e["rule"] = args.rule
     if args.fix:
@@ -193,7 +215,7 @@ def cmd_check(args) -> None:
     if not rows:
         print("memento: no lessons recorded yet")
         return
-    enforced = [(l, e) for l, e in rows if e["status"] != "watching"]
+    enforced = [(l, e) for l, e in rows if e["status"].startswith("enforced")]
     watching = [(l, e) for l, e in rows if e["status"] == "watching"]
     if enforced:
         print("ENFORCED (law):")
@@ -255,6 +277,21 @@ def cmd_promote(args) -> None:
     print(f"{e['slug']}: status enforced")
 
 
+def cmd_retire(args) -> None:
+    found = find(args.slug, args.project)
+    if found is None:
+        sys.exit(f"unknown slug: {args.slug}")
+    label, path, entries = found
+    e = entries[args.slug]
+    base = ai_dir() if e["scope"] == "global" else project_root(args.project)
+    for doc in ([base / "AGENTS.md", base / "CLAUDE.md"] if base else []):
+        if remove_rule(doc, e["slug"]):
+            print(f"rule removed from {doc}")
+    e["status"] = "retired"
+    save(path, entries, label)
+    print(f"{e['slug']}: retired — history kept, excluded from check; a new hit revives it")
+
+
 def cmd_remind(args) -> None:
     """UserPromptSubmit hook: stdin = hook JSON; nudge if the prompt smells like a repeated correction."""
     try:
@@ -286,7 +323,8 @@ def main(argv=None) -> None:
         p.set_defaults(fn=fn)
 
     for name, fn, help_ in (("show", cmd_show, "full entry with fix details"),
-                            ("promote", cmd_promote, "enforce: write rule into AGENTS.md/CLAUDE.md")):
+                            ("promote", cmd_promote, "enforce: write rule into AGENTS.md/CLAUDE.md"),
+                            ("retire", cmd_retire, "obsolete rule: remove from docs, keep history")):
         p = sub.add_parser(name, help=help_)
         p.add_argument("slug")
         p.set_defaults(fn=fn)

@@ -112,11 +112,49 @@ class MementoTest(unittest.TestCase):
         import json
         from unittest.mock import patch
         for prompt, expect in (("again?? use uv not python", True),
+                               ("we discussed this yesterday", True),
                                ("please add a login page", False)):
             out = io.StringIO()
             with patch("sys.stdin", io.StringIO(json.dumps({"prompt": prompt}))), redirect_stdout(out):
                 memento.main(["remind"])
             self.assertEqual("memento" in out.getvalue(), expect, prompt)
+
+    def test_retire_removes_rule_keeps_history_excludes_from_check(self):
+        self.run_cmd("hit", "old", "--rule", "Old rule text", "--scope", "global")
+        self.run_cmd("promote", "old")
+        out = self.run_cmd("retire", "old")
+        self.assertIn("retired", out)
+        for doc in ("AGENTS.md", "CLAUDE.md"):
+            self.assertNotIn("(memento: old)", (self.ai / doc).read_text())
+        self.assertIn("- existing rule", (self.ai / "AGENTS.md").read_text())
+        self.assertNotIn("Old rule text", self.run_cmd("check"))
+        self.assertIn("old", self.run_cmd("list"))
+        e = memento.parse(memento.global_ledger())["old"]
+        self.assertEqual(e["status"], "retired")
+        self.assertEqual(len(e["hits"]), 1)
+
+    def test_retire_watching_entry_needs_no_docs(self):
+        self.run_cmd("hit", "w", "--rule", "r", "--scope", "project")
+        out = self.run_cmd("retire", "w")
+        self.assertIn("retired", out)
+        self.assertNotIn("rule removed", out)
+
+    def test_hit_revives_retired_entry(self):
+        self.run_cmd("hit", "z", "--rule", "Rule Z", "--scope", "project")
+        self.run_cmd("retire", "z")
+        out = self.run_cmd("hit", "z")
+        self.assertIn("revived", out)
+        e = memento.parse(self.proj / "MEMENTO.md")["z"]
+        self.assertEqual(e["status"], "watching")
+        self.assertIn("Rule Z", self.run_cmd("check"))
+
+    def test_hit_warns_when_slug_in_both_ledgers(self):
+        self.run_cmd("hit", "dup", "--rule", "r", "--scope", "global")
+        entries = {"dup": memento.new_entry("dup") | {"scope": "project", "rule": "r"}}
+        memento.save(self.proj / "MEMENTO.md", entries, "project")
+        out = self.run_cmd("hit", "dup")
+        self.assertIn("both ledgers", out)
+        self.assertIn("project shadows global", out)
 
     def test_bootstrap_appendix_matches_script(self):
         boot = (Path(__file__).parent / "BOOTSTRAP.md").read_text()

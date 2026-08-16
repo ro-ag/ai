@@ -62,6 +62,8 @@ memento promote <slug>
 
 Writes the rule bullet into a dedicated `## Memento-enforced` section (never touches other sections): global scope → `AGENTS.md` + `CLAUDE.md` in the machine's rules dir (env `MEMENTO_AI_DIR`, else `rules_dir` in `~/.agents/memento/config.json`, else `~/.agents/memento/`); project scope → the project's `AGENTS.md` (created if missing) + `CLAUDE.md` if present. The ledger entry keeps the history and the detailed fix; the enforcement doc gets only the rule.
 
+Rule obsolete (tool fixed, project dead, user says so)? `memento retire <slug>` — removes the bullet from enforcement docs, keeps ledger history, drops it from `check` output. A later hit revives it to watching automatically.
+
 ## Scoring
 
 `memento top` ranks all lessons by hits + total cost with last-hit date — the rate-of-issues view. No database needed; the ledger is the data.
