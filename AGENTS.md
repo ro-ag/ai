@@ -18,7 +18,7 @@ Shared rules for every AI coding tool on this machine (Codex, Cursor, Copilot, A
 
 ## Memento — learn from mistakes (all tools)
 
-- Repeated-mistake ledger + enforcement. CLI: `python3 ~/.agents/memento/memento.py` (`uv run memento` inside this repo). Full protocol: `memento/SKILL.md`.
+- Repeated-mistake ledger + enforcement. CLI: `python3 ~/.agents/memento/memento.py` (`uv run memento` inside this repo). Full protocol: `skills/memento/SKILL.md`.
 - Task start: run `memento check` and respect its output. On any user correction, hard-won fix, or ignored quality gate: `memento hit <slug> --rule "..." --fix "..."`. On a PROMOTE alert or user "always/never": `memento promote <slug>`.
 
 ## Workspace

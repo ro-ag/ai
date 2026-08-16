@@ -2,21 +2,30 @@
 
 Workspace for agent documentation, helpers, and small tools — the rules that make AI coding agents effective and cheap. One repo is the single source of truth; every tool on the machine (Claude Code, Codex, Cursor, Copilot, …) gets pointed at it.
 
+Layout: **`rules/` is law** — constraints that always apply, loaded via pointers in the core files. **`skills/` is procedure** — invocable know-how, triggered when the task matches, installable into each tool's skill directory.
+
+## Core files
+
 | File | Purpose |
 |---|---|
 | `CLAUDE.md` | Core rules, loaded every session — kept deliberately small |
 | `AGENTS.md` | Shared hard rules read by the non-Claude tools |
+
+## Rules
+
+| File | Purpose |
+|---|---|
 | `rules/subagents.md` | When and how to delegate to subagents |
 | `rules/releases.md` | Release process and guardrails |
 | `rules/github-actions.md` | CI cost rules — Linux-first, gated Windows/macOS |
-| `rules/rust-app-remote-control.md` | Build, bundle, remotely control, and capture Rust GUI apps on macOS |
 | `rules/local/` | Machine-local, gitignored — tool inventories, subscriptions, review bridges |
 
-## Projects
+## Skills
 
 | Directory | Purpose |
 |---|---|
-| [`memento/`](memento/) | Repeated-mistake ledger for AI agents — mistakes get logged, repeated ones get promoted to enforced rules. Own README, one-command installer. |
+| [`skills/memento/`](skills/memento/) | Repeated-mistake ledger for AI agents — mistakes get logged, repeated ones get promoted to enforced rules. Own README, one-command installer. |
+| [`skills/rust-gui-control/`](skills/rust-gui-control/) | Build, bundle, remotely control, and capture Rust GUI apps on macOS |
 
 ## Tools (Python, managed with uv)
 

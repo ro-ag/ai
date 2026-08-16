@@ -3,8 +3,8 @@
 # for Claude Code, Codex, Copilot CLI, Gemini CLI (skill dirs). Cursor/Kimi/etc.:
 # paste the AGENTS.md pointer snippet from README.md afterwards.
 #
-# Install:       curl -fsSL https://raw.githubusercontent.com/ro-ag/ai/main/memento/install.sh | sh
-# Private fork:  gh api repos/YOU/FORK/contents/memento/install.sh -H "Accept: application/vnd.github.raw" | MEMENTO_REPO=YOU/FORK sh
+# Install:       curl -fsSL https://raw.githubusercontent.com/ro-ag/ai/main/skills/memento/install.sh | sh
+# Private fork:  gh api repos/YOU/FORK/contents/skills/memento/install.sh -H "Accept: application/vnd.github.raw" | MEMENTO_REPO=YOU/FORK sh
 #
 # Env: MEMENTO_REPO (default ro-ag/ai), MEMENTO_BRANCH (default main),
 #      GH_TOKEN (for curl against a private fork), MEMENTO_RULES_DIR (optional
@@ -13,7 +13,7 @@ set -eu
 
 REPO="${MEMENTO_REPO:-ro-ag/ai}"
 BRANCH="${MEMENTO_BRANCH:-main}"
-RAW="https://raw.githubusercontent.com/$REPO/$BRANCH/memento"
+RAW="https://raw.githubusercontent.com/$REPO/$BRANCH/skills/memento"
 DEST="$HOME/.agents/memento"
 
 fetch() { # $1 = filename, $2 = destination path
@@ -25,7 +25,7 @@ fetch() { # $1 = filename, $2 = destination path
         return 0
     fi
     if command -v gh >/dev/null 2>&1 &&
-        gh api "repos/$REPO/contents/memento/$1?ref=$BRANCH" \
+        gh api "repos/$REPO/contents/skills/memento/$1?ref=$BRANCH" \
             -H "Accept: application/vnd.github.raw" >"$2" 2>/dev/null; then
         return 0
     fi
@@ -47,4 +47,4 @@ python3 "$DEST/memento.py" check >/dev/null
 echo "memento installed."
 echo "  CLI    : python3 ~/.agents/memento/memento.py check"
 echo "  skills : ~/.claude/skills/memento (Claude), ~/.agents/skills/memento (Codex/Copilot/Gemini)"
-echo "  Cursor/Kimi/opencode/...: paste the AGENTS.md pointer snippet (memento/README.md)"
+echo "  Cursor/Kimi/opencode/...: paste the AGENTS.md pointer snippet (skills/memento/README.md)"

@@ -10,6 +10,7 @@ Posture: **quality first** — use the best model for work that matters; save to
 - `rules/releases.md` — read BEFORE any release, tag, or publish action
 - `rules/github-actions.md` — read BEFORE creating, editing, or auditing any CI workflow
 - `rules/local/` — machine-local, gitignored: `agents.md` (agent/skill/MCP inventory), `fleet.md` (subscriptions and task routing), `second-opinion.md` (cross-vendor review bridges)
+- `skills/` — invocable procedures (memento, rust-gui-control), installed into each tool's skill dir; rules constrain, skills execute
 - `AGENTS.md` — mirrors the hard rules for the non-Claude tools in the fleet; keep in sync with this file
 
 ## Token discipline
@@ -33,7 +34,7 @@ Posture: **quality first** — use the best model for work that matters; save to
 
 ## Memento — learn from mistakes
 
-- Task start: `python3 ~/.agents/memento/memento.py check` and respect it. User correction / hard-won fix / ignored quality gate → `memento hit`; PROMOTE alert or "always/never" → `memento promote`. Protocol: `memento/SKILL.md`.
+- Task start: `python3 ~/.agents/memento/memento.py check` and respect it. User correction / hard-won fix / ignored quality gate → `memento hit`; PROMOTE alert or "always/never" → `memento promote`. Protocol: `skills/memento/SKILL.md`.
 
 ## Language rules
 
