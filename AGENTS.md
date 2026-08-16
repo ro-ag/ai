@@ -24,7 +24,7 @@ Shared rules for every AI coding tool on this machine (Codex, Cursor, Copilot, A
 ## Workspace
 
 - Purpose: agent documentation, helpers, and small tools. Each project in its own subdirectory.
-- Release process: `rules/releases.md`. Tool fleet and task routing: `rules/fleet.md`. CI cost rules: `rules/github-actions.md`.
+- Release process: `rules/releases.md`. CI cost rules: `rules/github-actions.md`. Machine-local (gitignored): `rules/local/` — tool fleet, inventories, review bridges.
 - Posture: quality first — save tokens by avoiding waste, not by downgrading model quality on work that matters.
 - When hard rules change: re-run `uv run rulesync`, and keep the pointer BLOCK in `src/rulesync/core.py` in step — it is the condensed "hard minimum" copy of these rules.
 
