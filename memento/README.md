@@ -30,22 +30,45 @@ memento remind               # hook helper: stdin JSON, nudges on correction sig
 
 Alerts: 3 hits, or ≥30 min lost in one hit → `PROMOTE: run memento promote <slug>`.
 
-## Per-tool coverage
+## Install — the easy way (any machine)
 
-| Tool | How it gets memento |
-|---|---|
-| Claude Code | Skill symlink `~/.claude/skills/memento/SKILL.md` + `CLAUDE.md` rule + optional hooks (below) |
-| Codex / Copilot CLI | Skill symlink `~/.agents/skills/memento/SKILL.md` + `AGENTS.md` rule (rulesync pointer) |
-| Cursor, opencode, zcode, antigravity, trae | `AGENTS.md` rule via rulesync pointer block |
-
-## Install (this machine — already done)
+One block. Point `REPO` at your clone (or at any directory holding `SKILL.md` + `memento.py`; no clone at all → copy the SKILL.md appendix to `~/.agents/memento/memento.py` and skip the `cp`):
 
 ```bash
+REPO=~/dev/ai/memento
 mkdir -p ~/.agents/memento ~/.agents/skills/memento ~/.claude/skills/memento
-cp ~/dev/ai/memento/memento.py ~/.agents/memento/memento.py
-printf '{"rules_dir": "%s"}\n' ~/dev/ai > ~/.agents/memento/config.json
-ln -sf ~/dev/ai/memento/SKILL.md ~/.claude/skills/memento/SKILL.md
-ln -sf ~/dev/ai/memento/SKILL.md ~/.agents/skills/memento/SKILL.md
+cp "$REPO/memento.py" ~/.agents/memento/memento.py
+ln -sf "$REPO/SKILL.md" ~/.claude/skills/memento/SKILL.md   # Claude Code
+ln -sf "$REPO/SKILL.md" ~/.agents/skills/memento/SKILL.md   # Codex, Copilot CLI, Gemini CLI
+# optional: where global promoted rules land (default: ~/.agents/memento/)
+printf '{"rules_dir": "%s"}\n' "$HOME/dev/ai" > ~/.agents/memento/config.json
+```
+
+Run from anywhere, any tool:
+
+```bash
+python3 ~/.agents/memento/memento.py check
+```
+
+### Per-tool pickup
+
+| Tool | How it finds memento | Extra step |
+|---|---|---|
+| Claude Code | skill dir `~/.claude/skills/memento/` | optional hooks below |
+| Codex CLI | skill dir `~/.agents/skills/memento/` | — |
+| Copilot CLI | skill dir `~/.agents/skills/memento/` | — |
+| Gemini CLI | skill dir `~/.agents/skills/memento/` | — |
+| Cursor | no skills — pointer in `~/.cursor/AGENTS.md` | pointer snippet below (rulesync handles it on this machine) |
+| Kimi CLI, opencode, zcode, antigravity, trae, … | pointer in the tool's global agent file (`~/.config/opencode/AGENTS.md`, `~/.zcode/cli/AGENTS.md`, …) | pointer snippet below |
+
+Pointer snippet for tools without skill support — paste into their global `AGENTS.md`:
+
+```markdown
+## Memento — learn from mistakes
+- Task start: run `python3 ~/.agents/memento/memento.py check` and respect its output.
+- On user correction, hard-won fix, or ignored quality gate: `memento hit <slug> --rule "..." --fix "..."`.
+- On a PROMOTE alert or user "always/never": `memento promote <slug>`.
+- Full protocol: ~/.agents/skills/memento/SKILL.md
 ```
 
 After changing `memento.py`: re-run tests, re-inject the SKILL.md appendix, and re-copy to `~/.agents/memento/`.
