@@ -32,6 +32,16 @@ Alerts: 3 hits, or ≥30 min lost in one hit → `PROMOTE: run memento promote <
 
 ## Install — the easy way (any machine)
 
+### No clone: one command
+
+```bash
+gh api repos/ro-ag/ai/contents/memento/install.sh -H "Accept: application/vnd.github.raw" | sh
+```
+
+(Repo is private, so the `gh` form. With a token instead: `curl -fsSL -H "Authorization: token $GH_TOKEN" https://raw.githubusercontent.com/ro-ag/ai/main/memento/install.sh | sh` — plain curl works as-is if the repo ever goes public.) [install.sh](install.sh) fetches `memento.py` + the two skill markdown files into `~/.agents/memento` and both skill dirs; set `MEMENTO_RULES_DIR=~/dev/ai` before it to also write `config.json`.
+
+### From a clone
+
 One block. Point `REPO` at your clone (or at any directory holding the skill files; no clone at all → copy the BOOTSTRAP.md code block to `~/.agents/memento/memento.py` and skip the `cp`):
 
 ```bash
