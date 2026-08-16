@@ -43,6 +43,7 @@ memento hit <slug> [--rule "..."] [--fix "..."] [--kind habit|trick|gate|project
 memento top                  # rate-of-issues: ranked by hits + cost, last-hit shown
 memento list | show <slug>
 memento promote <slug>       # write rule into the Memento-enforced section
+memento retire <slug>        # obsolete rule: remove from docs, keep history; a new hit revives it
 memento remind               # hook helper: stdin JSON, nudges on correction signals
 ```
 
