@@ -15,7 +15,7 @@ Layout: **`rules/` is law** — constraints that always apply, loaded via pointe
 
 | File | Purpose |
 |---|---|
-| `rules/git-workflow.md` | Branch flow, PR + squash landing, branch hygiene |
+| `rules/git-workflow.md` | Branch flow, PR + squash landing, branch hygiene — GitHub (`gh`) and Bitbucket (`bkt`) |
 | `rules/subagents.md` | When and how to delegate to subagents |
 | `rules/releases.md` | Release process and guardrails |
 | `rules/github-actions.md` | CI cost rules — Linux-first, gated Windows/macOS |
