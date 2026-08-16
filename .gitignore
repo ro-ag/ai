@@ -27,3 +27,6 @@ build/
 .reviews/
 
 .claude/
+
+# Machine-local rules (subscriptions, inventories, account state)
+rules/local/

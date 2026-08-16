@@ -6,13 +6,11 @@ Workspace for agent documentation, helpers, and small tools — the rules that m
 |---|---|
 | `CLAUDE.md` | Core rules, loaded every session — kept deliberately small |
 | `AGENTS.md` | Shared hard rules read by the non-Claude tools |
-| `rules/agents.md` | Inventory of subagents, plugins, skills, MCP servers on this machine |
 | `rules/subagents.md` | When and how to delegate to subagents |
 | `rules/releases.md` | Release process and guardrails |
-| `rules/fleet.md` | Multi-tool fleet (Codex, Cursor, GLM…) and task routing |
-| `rules/second-opinion.md` | Cross-vendor review via Codex / Grok / Gemini bridges |
 | `rules/github-actions.md` | CI cost rules — Linux-first, gated Windows/macOS |
 | `rules/rust-app-remote-control.md` | Build, bundle, remotely control, and capture Rust GUI apps on macOS |
+| `rules/local/` | Machine-local, gitignored — tool inventories, subscriptions, review bridges |
 
 ## Projects
 

@@ -1,6 +1,6 @@
 # Working with subagents
 
-How to delegate so the main context stays small and cheap. Full inventory of what exists: `rules/agents.md`.
+How to delegate so the main context stays small and cheap. Full inventory of what exists: `rules/local/agents.md` (machine-local).
 
 ## Decision table
 
@@ -23,7 +23,7 @@ How to delegate so the main context stays small and cheap. Full inventory of wha
 3. **Parallelize.** Independent tasks → launch all agents in ONE message so they run concurrently.
 4. **Continue, don't respawn.** Use SendMessage with the agent's ID to follow up with context intact; a new Agent call starts from zero.
 5. **Don't duplicate delegated work.** Once a search is delegated, wait for the result instead of also searching inline.
-6. **Model override — quality first.** Default: omit, inherit the session model. **NEVER use haiku — no exceptions**, not even for mechanical fan-out; grunt volume belongs to the GLM/opencode fleet instead (`rules/fleet.md`). Never downgrade analysis, review, or planning agents.
+6. **Model override — quality first.** Default: omit, inherit the session model. **NEVER use haiku — no exceptions**, not even for mechanical fan-out; grunt volume belongs to the GLM/opencode fleet instead (`rules/local/fleet.md`, machine-local). Never downgrade analysis, review, or planning agents.
 7. **Reasoning effort:** leave at default. Pass `effort: 'high'` only when the task genuinely needs deep reasoning — hard debugging, architecture, adversarial verification. **Never `xhigh`/`max` by default** — they cause over-reasoning loops and cost without quality gains; reserve for explicit user request.
 8. **Worktree isolation** only when agents mutate files in parallel — it costs setup time and disk.
 9. **Workflow tool** (multi-agent orchestration, can spawn dozens of agents) only on explicit user opt-in: "use a workflow" / "ultracode". Division of labor: **subagents** for simple parallel fan-out (analyze N files), **workflows** for deterministic multi-stage programs needing checkpoints.

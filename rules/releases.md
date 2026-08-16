@@ -37,7 +37,7 @@ Actions minutes are paid on private repos (2,000/mo free tier; macOS runners bur
 - **No workflows unless the user explicitly asks.** Default quality gates are local: tests + `/verify` + `/code-review` + Copilot PR review (Copilot review is subscription-included, not Actions minutes).
 - When a workflow is justified, triggers are merge/tag only: `on: push: branches: [main]` and `on: push: tags: ['v*']`. Never `pull_request` or per-push on feature branches.
 - Workflow hygiene: `ubuntu-latest` runners only (never macOS unless the build requires it), `timeout-minutes` set low, `concurrency` with `cancel-in-progress`, path filters to skip doc-only changes.
-- Heavy/regular CI need later → self-hosted runner on this Mac (free minutes, fine for own private repos) before paying for hosted minutes.
+- Heavy/regular CI need later → self-hosted runner (free minutes, fine for own private repos) before paying for hosted minutes.
 
 ## Package registries (npm, PyPI, crates.io, Homebrew…)
 
