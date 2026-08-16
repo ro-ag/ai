@@ -49,7 +49,7 @@ def build_block(repo: Path) -> str:
 # Machine-wide agent rules — read first
 
 Before starting any work, read `{repo}/AGENTS.md` and, when relevant,
-`{repo}/rules/` (fleet routing, releases, subagents). Those laws override
+`{repo}/rules/` (git workflow, releases, subagents). Those laws override
 tool defaults. Hard minimum if the repo is unavailable:
 
 - NEVER add AI attribution (`Co-Authored-By`, "Generated with ...") to

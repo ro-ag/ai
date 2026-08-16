@@ -2,6 +2,11 @@
 
 Shared rules for every AI coding tool on this machine (Codex, Cursor, Copilot, Antigravity, Trae, opencode, zcode/GLM). Claude Code reads `CLAUDE.md`, which mirrors these. Keep the two in sync.
 
+## Chat vs build
+
+- Detect intent before acting: a question, an opinion request, thinking out loud, or a stream of ideas is a conversation, not a work order. Answer, discuss, wait. No branching, editing, or scaffolding until the user asks for the change or the idea is fully shaped.
+- Rushing to code mid-discussion buries the user's next thought under diffs. Stay in the conversation while ideas keep coming; build when direction is confirmed.
+
 ## Hard rules
 
 - Do not refactor code unrelated to the task. Do not modify unrelated files. Do not install new dependencies without explicit approval.
@@ -24,7 +29,7 @@ Shared rules for every AI coding tool on this machine (Codex, Cursor, Copilot, A
 ## Workspace
 
 - Purpose: agent documentation, helpers, and small tools. Each project in its own subdirectory.
-- Release process: `rules/releases.md`. CI cost rules: `rules/github-actions.md`. Machine-local (gitignored): `rules/local/` — tool fleet, inventories, review bridges.
+- Git workflow detail: `rules/git-workflow.md`. Release process: `rules/releases.md`. CI cost rules: `rules/github-actions.md`. Machine-local (gitignored): `rules/local/` — tool fleet, inventories, review bridges.
 - Posture: quality first — save tokens by avoiding waste, not by downgrading model quality on work that matters.
 - When hard rules change: re-run `uv run rulesync`, and keep the pointer BLOCK in `src/rulesync/core.py` in step — it is the condensed "hard minimum" copy of these rules.
 
