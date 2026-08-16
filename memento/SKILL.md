@@ -17,7 +17,7 @@ Never hand-edit ledger entries, never count occurrences yourself. Call the CLI (
 python3 ~/.agents/memento/memento.py <cmd>
 ```
 
-This skill ships as markdown only — the script travels in the Appendix below. If `~/.agents/memento/memento.py` is missing (first use on a machine), bootstrap: copy the Appendix code block verbatim to that path, then continue. (`uv run memento` also works inside `~/dev/ai`, where the canonical copy is developed and tested.)
+This skill ships as markdown only — the script travels in the Appendix below. If `~/.agents/memento/memento.py` is missing (first use on a machine), bootstrap: copy the Appendix code block verbatim to that path, then continue.
 
 ## Protocol: CONSULT → LOG → PROMOTE
 
@@ -60,7 +60,7 @@ When the CLI prints a PROMOTE alert, or the user says "always" / "never":
 memento promote <slug>
 ```
 
-Writes the rule bullet into a dedicated `## Memento-enforced` section (never touches other sections): global scope → `~/dev/ai/AGENTS.md` + `CLAUDE.md`; project scope → the project's `AGENTS.md` (created if missing) + `CLAUDE.md` if present. The ledger entry keeps the history and the detailed fix; the enforcement doc gets only the rule.
+Writes the rule bullet into a dedicated `## Memento-enforced` section (never touches other sections): global scope → `AGENTS.md` + `CLAUDE.md` in the machine's rules dir (env `MEMENTO_AI_DIR`, else `rules_dir` in `~/.agents/memento/config.json`, else `~/.agents/memento/`); project scope → the project's `AGENTS.md` (created if missing) + `CLAUDE.md` if present. The ledger entry keeps the history and the detailed fix; the enforcement doc gets only the rule.
 
 ## Scoring
 
@@ -80,7 +80,7 @@ Writes the rule bullet into a dedicated `## Memento-enforced` section (never tou
 
 ## Appendix — memento.py (bootstrap copy)
 
-Canonical: `~/dev/ai/memento/memento.py`. This block must stay byte-identical (guarded by `memento_test.py`).
+This block is the source of truth for `~/.agents/memento/memento.py` — copy it verbatim when bootstrapping or upgrading.
 
 <!-- appendix-start -->
 ```python
@@ -94,13 +94,12 @@ Ledgers (markdown, owned by this script — do not hand-edit entry fields):
   global : ~/.agents/memento/MEMENTO.md   (override dir: MEMENTO_HOME)
   project: <git root>/MEMENTO.md
 
-Enforcement docs for global-scope rules live in the AI workspace repo
-(default ~/dev/ai, override: MEMENTO_AI_DIR).
+Global-scope promoted rules are appended to AGENTS.md (+ CLAUDE.md if present)
+in the rules dir: env MEMENTO_AI_DIR, else "rules_dir" in
+~/.agents/memento/config.json, else ~/.agents/memento itself.
 
-Canonical copy: ~/dev/ai/memento/memento.py — the appendix in the sibling
-SKILL.md must stay byte-identical (memento_test.py guards this). The skill
-ships as markdown only; the runtime copy lives at ~/.agents/memento/memento.py,
-bootstrapped from the appendix when missing.
+The skill ships as markdown only: the SKILL.md appendix carries this script
+verbatim and bootstraps it to ~/.agents/memento/memento.py when missing.
 """
 
 import argparse
@@ -124,7 +123,14 @@ def global_ledger() -> Path:
 
 
 def ai_dir() -> Path:
-    return Path(os.environ.get("MEMENTO_AI_DIR", "~/dev/ai")).expanduser()
+    if "MEMENTO_AI_DIR" in os.environ:
+        return Path(os.environ["MEMENTO_AI_DIR"]).expanduser()
+    cfg = global_ledger().parent / "config.json"
+    if cfg.exists():
+        rules_dir = json.loads(cfg.read_text()).get("rules_dir")
+        if rules_dir:
+            return Path(rules_dir).expanduser()
+    return global_ledger().parent
 
 
 def project_root(start: str | None) -> Path | None:

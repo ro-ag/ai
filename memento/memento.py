@@ -8,13 +8,12 @@ Ledgers (markdown, owned by this script — do not hand-edit entry fields):
   global : ~/.agents/memento/MEMENTO.md   (override dir: MEMENTO_HOME)
   project: <git root>/MEMENTO.md
 
-Enforcement docs for global-scope rules live in the AI workspace repo
-(default ~/dev/ai, override: MEMENTO_AI_DIR).
+Global-scope promoted rules are appended to AGENTS.md (+ CLAUDE.md if present)
+in the rules dir: env MEMENTO_AI_DIR, else "rules_dir" in
+~/.agents/memento/config.json, else ~/.agents/memento itself.
 
-Canonical copy: ~/dev/ai/memento/memento.py — the appendix in the sibling
-SKILL.md must stay byte-identical (memento_test.py guards this). The skill
-ships as markdown only; the runtime copy lives at ~/.agents/memento/memento.py,
-bootstrapped from the appendix when missing.
+The skill ships as markdown only: the SKILL.md appendix carries this script
+verbatim and bootstraps it to ~/.agents/memento/memento.py when missing.
 """
 
 import argparse
@@ -38,7 +37,14 @@ def global_ledger() -> Path:
 
 
 def ai_dir() -> Path:
-    return Path(os.environ.get("MEMENTO_AI_DIR", "~/dev/ai")).expanduser()
+    if "MEMENTO_AI_DIR" in os.environ:
+        return Path(os.environ["MEMENTO_AI_DIR"]).expanduser()
+    cfg = global_ledger().parent / "config.json"
+    if cfg.exists():
+        rules_dir = json.loads(cfg.read_text()).get("rules_dir")
+        if rules_dir:
+            return Path(rules_dir).expanduser()
+    return global_ledger().parent
 
 
 def project_root(start: str | None) -> Path | None:

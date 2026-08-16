@@ -14,7 +14,7 @@ Protocol lives in [SKILL.md](SKILL.md) (CONSULT → LOG → PROMOTE). The skill 
 | Enforcement docs, global scope | `~/dev/ai/AGENTS.md` + `CLAUDE.md`, section `## Memento-enforced` |
 | Enforcement docs, project scope | project `AGENTS.md` (+ `CLAUDE.md` if present) |
 
-Env overrides: `MEMENTO_HOME` (dir of global ledger), `MEMENTO_AI_DIR` (workspace with global enforcement docs).
+Global rules dir resolution: env `MEMENTO_AI_DIR` → `rules_dir` in `~/.agents/memento/config.json` → `~/.agents/memento/` itself. This machine uses config.json pointing at `~/dev/ai`. `MEMENTO_HOME` overrides the global ledger dir (tests use it). SKILL.md stays ultra generic — machine specifics live only in config.json.
 
 ## Commands
 
@@ -43,6 +43,7 @@ Alerts: 3 hits, or ≥30 min lost in one hit → `PROMOTE: run memento promote <
 ```bash
 mkdir -p ~/.agents/memento ~/.agents/skills/memento ~/.claude/skills/memento
 cp ~/dev/ai/memento/memento.py ~/.agents/memento/memento.py
+printf '{"rules_dir": "%s"}\n' ~/dev/ai > ~/.agents/memento/config.json
 ln -sf ~/dev/ai/memento/SKILL.md ~/.claude/skills/memento/SKILL.md
 ln -sf ~/dev/ai/memento/SKILL.md ~/.agents/skills/memento/SKILL.md
 ```
