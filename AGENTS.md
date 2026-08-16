@@ -16,9 +16,21 @@ Shared rules for every AI coding tool on this machine (Codex, Cursor, Copilot, A
 
 - **Rust:** do not combine sources with tests — never put `#[cfg(test)] mod tests` blocks inside a source file. Go-style siblings: `module.rs` + `module_test.rs`, wired from the parent (`lib.rs`/`mod.rs`) with `#[cfg(test)] mod module_test;`.
 
+## Memento — learn from mistakes (all tools)
+
+- Repeated-mistake ledger + enforcement. CLI: `python3 ~/.agents/memento/memento.py` (`uv run memento` inside this repo). Full protocol: `memento/SKILL.md`.
+- Task start: run `memento check` and respect its output. On any user correction, hard-won fix, or ignored quality gate: `memento hit <slug> --rule "..." --fix "..."`. On a PROMOTE alert or user "always/never": `memento promote <slug>`.
+
 ## Workspace
 
 - Purpose: agent documentation, helpers, and small tools. Each project in its own subdirectory.
 - Release process: `rules/releases.md`. Tool fleet and task routing: `rules/fleet.md`. CI cost rules: `rules/github-actions.md`.
 - Posture: quality first — save tokens by avoiding waste, not by downgrading model quality on work that matters.
 - When hard rules change: re-run `uv run rulesync`, and keep the pointer BLOCK in `src/rulesync/core.py` in step — it is the condensed "hard minimum" copy of these rules.
+
+## Memento-enforced
+
+Rules promoted from the memento ledger. Details/fix: `memento show <slug>`.
+- In uv-managed projects use uv run / uv add only — never bare python or pip (memento: uv-not-python)
+- Never ignore SonarQube gate findings — coverage, cognitive complexity, and code smells must be fixed before calling work done (memento: quality-gates-ignored)
+
