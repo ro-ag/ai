@@ -33,6 +33,17 @@ Posture: **quality first** — use the best model for work that matters; save to
 - GitHub Actions only when explicitly asked, and only triggered on merge to `main` / release tags — never per-push or per-PR. Quality gates run locally before merge. When CI exists or is requested, enforce the cost rules in `rules/github-actions.md` (Linux-first, gated Windows/macOS, concurrency cancellation, path filters, caches, staged jobs).
 - Each project lives in its own subdirectory. Add a project-level CLAUDE.md only when its rules differ from these.
 
+## Memento — learn from mistakes
+
+- Task start: `python3 ~/.agents/memento/memento.py check` and respect it. User correction / hard-won fix / ignored quality gate → `memento hit`; PROMOTE alert or "always/never" → `memento promote`. Protocol: `memento/SKILL.md`.
+
 ## Language rules
 
 - **Rust:** do not combine sources with tests — never put `#[cfg(test)] mod tests` blocks inside a source file. Go-style siblings: `module.rs` + `module_test.rs`, wired from the parent (`lib.rs`/`mod.rs`) with `#[cfg(test)] mod module_test;`.
+
+## Memento-enforced
+
+Rules promoted from the memento ledger. Details/fix: `memento show <slug>`.
+- In uv-managed projects use uv run / uv add only — never bare python or pip (memento: uv-not-python)
+- Never ignore SonarQube gate findings — coverage, cognitive complexity, and code smells must be fixed before calling work done (memento: quality-gates-ignored)
+
