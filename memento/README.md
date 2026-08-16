@@ -1,8 +1,8 @@
 # Memento
 
-Your AI agent has the memory of Leonard from *Memento* — or Lucy from *50 First Dates*, pick your movie. Every session it wakes up fresh, absolutely convinced it is a genius, and commits the exact same crime you already yelled about three times this week: bare `pip` in a uv project, "let's skip the coverage gate just this once", a full hour re-discovering the SSL fix it already found on Tuesday. And every rerun of that amnesia is billed to you, by the token.
+Every AI agent is Leonard from *Memento*. Wakes up brilliant, remembers nothing, commits yesterday's crime again — and bills you for the rerun. Bare `pip` in a uv project. Coverage gate skipped "just this once", every once. An hour rediscovering Tuesday's SSL fix. You've explained it three times. There will be a fourth. (Lucy from *50 First Dates*, if you prefer your amnesia romantic.)
 
-Memento is the tattoo kit. Leonard inked the facts he couldn't afford to lose; here, mistakes get inked into ledgers the moment they happen — recurrence counted, minutes lost scored — and once something hits three times (or burns 30+ minutes, or you scream "ALWAYS"), it stops being a gentle lesson and becomes law, written into the rule files every agent is forced to read at startup. The agent doesn't need to remember. The tattoos do. Your wallet sends its regards.
+Leonard tattooed what he couldn't afford to forget. Same deal here. Every mistake gets inked the moment it happens — counted, costed, dated. Three hits, thirty minutes burned, or one "ALWAYS" out of you, and it stops being a lesson and becomes law: written into the rule files every agent must read before touching anything. The agent won't remember. The tattoos will.
 
 ## Install — one shot, no clone
 
