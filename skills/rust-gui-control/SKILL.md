@@ -1,37 +1,22 @@
 ---
 name: rust-gui-control
-description: Use when remote-controlling, driving, testing, or screen-capturing a Rust GUI app on macOS with computer-use or app-control tools — especially when a cargo-built binary draws a window but the controller cannot find or target it ("Invalid app", missing from app inventory), when pointer/hover actions miss or do not register, or when exact-pixel window captures are needed for visual verification.
+description: Use when remote-controlling, driving, testing, or screen-capturing a Rust GUI app on macOS with computer-use or app-control tools — especially when a cargo-built binary draws a window but the controller cannot target it ("Invalid app", missing from app inventory), when pointer/hover actions miss, or when exact-pixel window captures are needed for visual verification.
 ---
 
 # Remote-controlling Rust GUI apps on macOS
 
-Native app-control tools can reliably target a Rust GUI only when macOS sees the
-process as an application. A binary launched directly with `cargo run` or from
-`target/debug/` may draw a normal window, but it has no registered `.app`
-identity and can be absent from the controller's app inventory.
+App-control tools can target a Rust GUI only when macOS sees it as an application. A bare `cargo run` / `target/debug/` binary draws a window but has no registered `.app` identity and is absent from the controller's app inventory.
 
-The reliable workflow is:
-
-1. Build the debug binary.
-2. Wrap that exact binary in a temporary `.app` with an `Info.plist` and stable
-   bundle identifier.
-3. Target the `.app` by absolute path through the native app-control tool.
-4. Use app control for keyboard, pointer, menus, and accessibility state.
-5. Use exact-window PNG capture when color or translucent-layer fidelity
-   matters.
+Workflow: build debug binary → wrap that exact binary in a temporary `.app` with stable bundle id → target the `.app` by absolute path → drive keyboard/pointer/menus via app control → use exact-window PNG capture when color/alpha fidelity matters.
 
 ## macOS permissions
 
-The process hosting the agent—Terminal, Ghostty, VS Code, Codex, or another
-desktop app—needs both:
+The agent's host process (Terminal, Ghostty, VS Code, Codex, …) needs both:
 
 - System Settings → Privacy & Security → Screen Recording
 - System Settings → Privacy & Security → Input Monitoring
 
-Fully quit and restart the host app after granting either permission. macOS may
-silently drop input events until it is restarted.
-
-Verify input injection before debugging the Rust app:
+Fully quit and restart the host app after granting either — macOS silently drops input events until restart. Verify injection before debugging the Rust app:
 
 ```sh
 uv run --with pyobjc-framework-Quartz python -c "
@@ -41,56 +26,34 @@ def pos():
     return (point.x, point.y)
 print('before', pos())
 event = Quartz.CGEventCreateMouseEvent(
-    None,
-    Quartz.kCGEventMouseMoved,
-    (1190, 490),
-    Quartz.kCGMouseButtonLeft,
-)
+    None, Quartz.kCGEventMouseMoved, (1190, 490), Quartz.kCGMouseButtonLeft)
 Quartz.CGEventPost(Quartz.kCGHIDEventTap, event)
 time.sleep(0.5)
 print('after ', pos())
 "
 ```
 
-If `before` equals `after`, stop. Fix permissions and restart the host before
-trying app automation.
+If `before` equals `after`, stop — fix permissions and restart the host first.
 
-## Preferred: use the project's packager
+## Preferred: the project's packager
 
-Reuse an existing packaging script when one can accept a debug binary. This
-preserves the product's executable name, bundle identifier, and plist.
-
-Typical shape:
+If the project has a packaging script that accepts a debug binary, use it — it preserves the product's executable name, bundle id, and plist:
 
 ```sh
 cargo build -p my-app
-python3 tools/package.py \
-  --os macos \
-  --binary target/debug/my-app \
-  --out /tmp/my-app-bundle \
-  --version debug
+python3 tools/package.py --os macos --binary target/debug/my-app --out /tmp/my-app-bundle --version debug
 ```
 
-This still tests `target/debug/my-app`; packaging only copies that binary into
-an application bundle.
-
-Target the absolute `.app` path first. For example, with a native computer-use
-API (`ctl` stands for your controller's client object throughout):
+Packaging only copies the binary; you are still testing `target/debug/my-app`. Target the absolute `.app` path first (`ctl` = your controller's client object):
 
 ```js
-var state = await ctl.get_app_state({
-  app: "/tmp/my-app-bundle/MyApp.app",
-  disableDiff: true,
-});
+var state = await ctl.get_app_state({ app: "/tmp/my-app-bundle/MyApp.app", disableDiff: true });
 console.log(state.text);
 ```
 
-An app name or bundle identifier may work after Launch Services has seen the
-bundle, but the absolute path is the least ambiguous first target.
+App name or bundle id may work after Launch Services has seen the bundle, but the absolute path is the least ambiguous first target.
 
-## Minimum application-bundle shape
-
-If a project has no packager, create a temporary local bundle with this shape:
+## Minimum bundle shape (no packager)
 
 ```text
 MyApp.app/
@@ -100,7 +63,7 @@ MyApp.app/
         └── my-app
 ```
 
-`Info.plist` needs at least:
+`Info.plist` minimum:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -120,16 +83,9 @@ MyApp.app/
 </plist>
 ```
 
-Requirements:
+Requirements: `CFBundleExecutable` exactly matches the file in `Contents/MacOS/`; executable bit set; bundle id stable and unique; temporary bundles live under a task-specific dir in `/tmp`, never in the repo or release output.
 
-- `CFBundleExecutable` exactly matches the file under `Contents/MacOS/`.
-- The executable bit is set.
-- `CFBundleIdentifier` is stable and unique.
-- Build locally; do not download or run an untrusted bundle.
-- Put temporary bundles under a task-specific directory in `/tmp`, not in the
-  repo or a release output directory.
-
-Example for a binary at `target/debug/my-app`:
+Build it for a binary at `target/debug/my-app`:
 
 ```sh
 RUST_GUI_BUNDLE_ROOT="$(mktemp -d /tmp/rust-gui-control.XXXXXX)"
@@ -151,85 +107,47 @@ plutil -create xml1 "$RUST_GUI_CONTENTS/Info.plist"
 echo "$RUST_GUI_APP"
 ```
 
-Code signing is not required merely to remote-control a locally built debug
-bundle. Signing, entitlements, notarization, release packaging, and publishing
-are separate workflows and require their normal authorization.
+Code signing is not required to remote-control a locally built debug bundle. Signing, entitlements, notarization, and release packaging are separate workflows needing their normal authorization.
 
 ## Control workflow
 
-Start every control session by reading fresh app state:
+Start every session by reading fresh app state; re-read after every action before choosing the next one:
 
 ```js
 var state = await ctl.get_app_state({ app: appPath, disableDiff: true });
 console.log(state.text);
-```
-
-Then:
-
-- Prefer accessibility element actions over coordinates when elements are
-  exposed.
-- Use app-targeted key presses instead of global keyboard injection.
-- After every action, fetch state again before choosing the next action.
-- Re-derive accessibility element indexes from the new state; indexes can
-  become stale after any UI change.
-- Treat remote click coordinates as coordinates in the controller's current
-  app screenshot unless that controller explicitly documents another space.
-- Use a freshly captured full screenshot before coordinate actions.
-
-Example:
-
-```js
 await ctl.press_key({ app: appPath, key: "super+alt+v" });
 state = await ctl.get_app_state({ app: appPath });
-console.log(state.text);
 ```
 
-Raw custom-rendered surfaces often expose only the window and menu bar through
-accessibility. Coordinate input is expected for those surfaces; verify success
-through observable app state such as a cursor offset, inspector value, selected
-row, or a follow-up screenshot.
+- Prefer accessibility element actions over coordinates when elements are exposed; re-derive element indexes from each new state — they go stale on any UI change.
+- Prefer app-targeted key presses over global keyboard injection.
+- Treat remote click coordinates as relative to the controller's current app screenshot unless the controller documents another space; capture a fresh full screenshot before coordinate actions.
+- Raw custom-rendered surfaces often expose only window + menu bar via accessibility. Coordinate input is expected there — verify success through observable app state (cursor offset, inspector value, selected row) or a follow-up screenshot.
 
 ### Hover-only verification
 
-Some app-control APIs expose click and drag but not pointer movement. Options,
-in preference order:
+If the control API lacks pointer movement, in preference order:
 
-1. Use a remote pointer-move or hover action when available.
-2. Use a debug-only forced-hover hook when the app provides one (e.g. an
-   env var like `MYAPP_FORCE_HOVER=0x52`).
+1. Use a remote pointer-move/hover action if available.
+2. Use a debug-only forced-hover hook if the app provides one (e.g. `MYAPP_FORCE_HOVER=0x52`).
 3. Raise the bundled app, then inject a Quartz `kCGEventMouseMoved` event.
-4. Click a harmless target only when changing selection/cursor state is
-   acceptable, and restore that state afterward.
+4. Click a harmless target only if changing selection/cursor state is acceptable; restore state afterward.
 
-Do not claim hover follows the pointer based only on a forced-hover screenshot.
-Use at least two real pointer positions or another observable event-driven
-check.
+Never claim hover-follows-pointer from a forced-hover screenshot — use at least two real pointer positions or another event-driven check.
 
 ## Capture workflow
 
-Remote app screenshots are best for:
-
-- understanding current UI state;
-- reading accessibility output;
-- locating controls for the next action;
-- quick visual checks.
-
-They may be JPEG-compressed or diff/mask images. Do not use them as the only
-evidence for subtle alpha, gradients, one-pixel seams, or exact color hierarchy.
+Remote app screenshots are for UI state, accessibility output, and locating controls. They may be JPEG-compressed or diff/mask images — not evidence for subtle alpha, gradients, 1px seams, or exact colors.
 
 For visual-quality verification:
 
-1. List windows and record the exact `CGWindowID` and bounds.
-2. Capture that window by ID as PNG.
-3. Reuse the known ID for later captures instead of relisting a background
-   window.
-4. Capture only the app window, not a full display.
-
-Use the project's capture helper when it has one; otherwise `screencapture -l`
-against the recorded window ID:
+1. List windows; record the exact `CGWindowID` and bounds.
+2. Capture that window by ID as PNG; reuse the known ID for later captures.
+3. Capture only the app window, never the full display.
 
 ```sh
-# list windows for the app, note the CGWindowID
+# list the app's windows, note the CGWindowID
 uv run --with pyobjc-framework-Quartz python -c "
 import Quartz
 for w in Quartz.CGWindowListCopyWindowInfo(Quartz.kCGWindowListOptionOnScreenOnly, Quartz.kCGNullWindowID):
@@ -240,54 +158,21 @@ for w in Quartz.CGWindowListCopyWindowInfo(Quartz.kCGWindowListOptionOnScreenOnl
 screencapture -l WINDOW_ID -o /tmp/my-app-window.png
 ```
 
-If `screencapture -l` fails with “could not create image from window,” fall back
-to `CGWindowListCreateImage` for that exact window and write it with
-`CGImageDestination`. On macOS 15 the SDK marks the API unavailable to direct
-Swift calls even though the runtime symbol remains present; bind the symbol
-dynamically or use a tested project helper.
+If `screencapture -l` fails with "could not create image from window", fall back to `CGWindowListCreateImage` + `CGImageDestination`. On macOS 15 the SDK marks that API unavailable to direct Swift calls though the runtime symbol exists — bind it dynamically or use a tested project helper.
 
 ## Troubleshooting
 
-### `Invalid app` for a visible Rust window
-
-The process is probably a bare executable. Confirm that the controller's app
-inventory has no entry, then wrap the debug binary in `.app` form and target the
-absolute bundle path.
-
-### App is controllable but pointer actions miss
-
-- Refresh full app state and screenshot.
-- Confirm whether coordinates are app-screenshot-relative or global.
-- Use an obvious harmless target and verify through app state.
-- Account for title bars, window shadows, display origins, and Retina scaling
-  only when using global/native coordinates; do not apply those transforms to
-  screenshot-relative coordinates.
-
-### Global pointer moves but hover does not update
-
-- Ensure the app is frontmost or raised.
-- Move from outside the target surface to inside it so the app receives enter
-  and move events.
-- Wait at least 0.5 seconds before capture.
-- Confirm the point lies over real content; custom viewers may intentionally
-  paint no hover over EOF or empty space.
-
-### Remote screenshot is black except for changed regions
-
-The controller returned a diff or mask image. Request fresh state with diffing
-disabled, then capture again. If the controller still returns a mask, use the
-exact-window PNG path.
-
-### AppleScript cannot activate the app
-
-Bare binaries are not reliably AppleScript-addressable. Bundle first. Prefer
-app-targeted control actions over scripting activation by process name.
+| Symptom | Cause → fix |
+|---|---|
+| `Invalid app` for a visible Rust window | Bare executable, no bundle → wrap in `.app`, target absolute bundle path. |
+| Controllable but pointer actions miss | Stale state, or wrong coordinate space → refresh state + screenshot; verify whether coordinates are screenshot-relative or global; test on a harmless target. Apply title-bar/shadow/Retina transforms only to global coordinates, never to screenshot-relative ones. |
+| Global pointer moves but hover doesn't update | App not frontmost, or no enter/move events → raise app, move from outside the surface inward, wait ≥0.5 s, confirm the point is over real content (custom viewers may paint no hover over EOF/empty space). |
+| Screenshot black except changed regions | Controller returned a diff/mask → re-request state with `disableDiff: true`; if still a mask, use the exact-window PNG path. |
+| AppleScript can't activate the app | Bare binaries aren't reliably AppleScript-addressable → bundle first; prefer app-targeted actions. |
+| App hangs on first keychain/credential access | Not a control problem — see `memento show macos-dev-keychain-prompt-loop` and `macos-login-keychain-auth-failed` (unsigned-binary ACL loops, `errSecAuthFailed`, first-access signature-eval delay). |
 
 ## Session cleanup
 
-- Restore any appearance, view mode, wrapping, width, or selection state changed
-  during verification.
-- Terminate the temporary app after the checks.
-- Leave temporary bundles under `/tmp`; do not commit them.
-- Do not turn debug packaging into a release, signing, tagging, or publishing
-  action.
+- Restore any appearance, view mode, wrapping, width, or selection state changed during verification.
+- Terminate the temporary app; leave temporary bundles in `/tmp`, never commit them.
+- Do not turn debug packaging into a release, signing, tagging, or publishing action.
