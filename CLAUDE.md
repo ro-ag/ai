@@ -16,7 +16,7 @@ Posture: **quality first** — use the best model for work that matters; save to
 
 ## Token discipline
 
-- Delegate broad searches and investigation to subagents; keep the main context for decisions. Default code locator: `caveman:cavecrew-investigator` (compressed output).
+- Delegate broad searches and investigation to subagents; keep the main context for decisions. Default to read-only explorer/locator subagents that return conclusions, not file dumps.
 - If exploration would take more than ~3 file reads or ~5 tool calls, delegate it instead of doing it inline.
 - Batch independent tool calls in a single message so they run in parallel.
 - Read only the line ranges you need from large files; never re-read files already in context.
@@ -49,6 +49,13 @@ Posture: **quality first** — use the best model for work that matters; save to
 ## Memento-enforced
 
 Rules promoted from the memento ledger. Details/fix: `memento show <slug>`.
-- In uv-managed projects use uv run / uv add only — never bare python or pip (memento: uv-not-python)
+- In uv-managed projects use uv run / uv add only — never bare python or pip; stdlib-only scripts (e.g. memento.py) run with plain python3 (memento: uv-not-python)
 - Never ignore SonarQube gate findings — coverage, cognitive complexity, and code smells must be fixed before calling work done (memento: quality-gates-ignored)
+- Visual-design agent prompts must carry measurable acceptance criteria (e.g. 'diff obvious in 2s side-by-side', 'gradient sweep >=50 levels'), never soft adjectives like 'restrained' or 'subtle polish' — those produce invisible changes the owner rejects (memento: design-agent-needs-measurable-boldness)
+- Unsigned macOS debug binaries re-prompt keychain ACLs on every rebuild and block callers inside SecKeychainFindGenericPassword (masquerades as daemon/IPC hang) — sign dev binaries with a stable codesigning identity (memento: macos-dev-keychain-prompt-loop)
+- A Tauri app binary built with plain cargo build --release keeps the dev context (loads devUrl, white window offline) — production binaries must be built through 'tauri build', including --no-bundle (memento: tauri-release-needs-cli-build)
+- A merge is not landed until the main-branch CI run is green — check gh run list / pr checks after every squash-merge instead of reporting success from local gates alone (memento: verify-ci-after-merge)
+- Never keep a live continuously-written binary DB (e.g. .ptrack/ptrack.redb) tracked in git — it permanently dirties the tree, breaks gh pr merge checkouts, ff pulls, and stash pops; and when untracking it, back the file up first because the merge checkout can delete the on-disk copy (memento: git-tracked-live-db)
+- macOS login keychain that cannot auto-unlock returns errSecAuthFailed (-25293) on every write with NO permission prompt — masquerades as app-level 'native credential store unavailable'; it is not a signing or app bug (memento: macos-login-keychain-auth-failed)
+- First keychain access from a freshly-linked signed macOS binary can take 1-5s (security server evaluates the whole binary's code signature); keychain-touching requests need generous deadlines or a startup warm-up, and 2s test deadlines on such paths are flaky by design (memento: keychain-first-access-signature-eval)
 
